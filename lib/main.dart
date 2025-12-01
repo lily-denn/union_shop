@@ -91,7 +91,86 @@ class HomeScreen extends StatelessWidget {
                               },
                             ),
                           ),
-                          const Spacer(),
+                          const SizedBox(width: 16),
+                          Flexible(
+                            fit: FlexFit.tight,
+                            child: Wrap(
+                              spacing: 12,
+                              runSpacing: 4,
+                              alignment: WrapAlignment.center,
+                              crossAxisAlignment: WrapCrossAlignment.center,
+                              children: [
+                                TextButton(
+                                  onPressed: () {
+                                    navigateToHome(context);
+                                  },
+                                  style: TextButton.styleFrom(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8, vertical: 0),
+                                    foregroundColor: Colors.black,
+                                  ),
+                                  child: const Text('Home',
+                                      style: TextStyle(fontSize: 14)),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    navigateToHome(context);
+                                  },
+                                  style: TextButton.styleFrom(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8, vertical: 0),
+                                      foregroundColor: Colors.black),
+                                  child: const Text('Shop',
+                                      style: TextStyle(fontSize: 14)),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    navigateToHome(context);
+                                  },
+                                  style: TextButton.styleFrom(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8, vertical: 0),
+                                      foregroundColor: Colors.black),
+                                  child: const Text('The Print Shack',
+                                      style: TextStyle(fontSize: 14)),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    navigateToHome(context);
+                                  },
+                                  style: TextButton.styleFrom(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8, vertical: 0),
+                                      foregroundColor: Colors.black),
+                                  child: const Text('SALE!',
+                                      style: TextStyle(fontSize: 14)),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    navigateToHome(context);
+                                  },
+                                  style: TextButton.styleFrom(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8, vertical: 0),
+                                      foregroundColor: Colors.black),
+                                  child: const Text('About',
+                                      style: TextStyle(fontSize: 14)),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    navigateToHome(context);
+                                  },
+                                  style: TextButton.styleFrom(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8, vertical: 0),
+                                      foregroundColor: Colors.black),
+                                  child: const Text('UPSU.net',
+                                      style: TextStyle(fontSize: 14)),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(width: 16),
                           ConstrainedBox(
                             constraints: const BoxConstraints(maxWidth: 600),
                             child: Row(
