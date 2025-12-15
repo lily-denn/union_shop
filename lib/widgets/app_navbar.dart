@@ -7,6 +7,10 @@ class AppNavbar extends StatelessWidget {
     Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
   }
 
+  void navigateToAbout(BuildContext context) {
+    Navigator.pushNamed(context, '/about');
+  }
+
   void placeholderCallbackForButtons() {
     // This is the event handler for buttons that don't work yet
   }
@@ -118,7 +122,7 @@ class AppNavbar extends StatelessWidget {
                             ),
                             TextButton(
                               onPressed: () {
-                                navigateToHome(context);
+                                navigateToAbout(context);
                               },
                               style: TextButton.styleFrom(
                                   padding: const EdgeInsets.symmetric(
@@ -222,7 +226,7 @@ class AppNavbar extends StatelessWidget {
                                           navigateToHome(context);
                                           break;
                                         case 'about':
-                                          navigateToHome(context);
+                                          navigateToAbout(context);
                                           break;
                                         case 'upsu':
                                           navigateToHome(context);
