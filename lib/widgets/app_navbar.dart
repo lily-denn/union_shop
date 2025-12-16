@@ -19,6 +19,10 @@ class AppNavbar extends StatelessWidget {
     Navigator.pushNamed(context, '/collections');
   }
 
+  void navigateToSignIn(BuildContext context) {
+    Navigator.pushNamed(context, '/sign_in');
+  }
+
   void placeholderCallbackForButtons() {
     // This is the event handler for buttons that don't work yet
   }
@@ -185,7 +189,9 @@ class AppNavbar extends StatelessWidget {
                             minWidth: isSmallScreen ? 48.0 : 32.0,
                             minHeight: isSmallScreen ? 48.0 : 32.0,
                           ),
-                          onPressed: placeholderCallbackForButtons,
+                          onPressed: () {
+                            navigateToSignIn(context);
+                          },
                         ),
                         IconButton(
                           icon: Icon(
