@@ -20,6 +20,26 @@ class HomeScreen extends StatelessWidget {
     // This is the event handler for buttons that don't work yet
   }
 
+  Widget _buildCategoryCard(String label) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.grey[200],
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Center(
+        child: Text(
+          label,
+          style: const TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+            letterSpacing: 1,
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -360,54 +380,378 @@ class HomeScreen extends StatelessWidget {
             // Products Section
             Container(
               color: Colors.white,
-              child: Padding(
-                padding: const EdgeInsets.all(40.0),
-                child: Column(
-                  children: [
-                    const Text(
-                      'PRODUCTS SECTION',
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.black,
-                        letterSpacing: 1,
-                      ),
-                    ),
-                    const SizedBox(height: 48),
-                    GridView.count(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      crossAxisCount:
-                          MediaQuery.of(context).size.width > 600 ? 2 : 1,
-                      crossAxisSpacing: 24,
-                      mainAxisSpacing: 48,
-                      children: const [
-                        ProductCard(
-                          title: 'Placeholder Product 1',
-                          price: '£10.00',
-                          imageUrl:
-                              'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 1200),
+                  child: Padding(
+                    padding: const EdgeInsets.all(40.0),
+                    child: Column(
+                      children: [
+                        const Text(
+                          'ESSENTIAL RANGE - OVER 20% OFF!',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                            letterSpacing: 1,
+                          ),
                         ),
-                        ProductCard(
-                          title: 'Placeholder Product 2',
-                          price: '£15.00',
-                          imageUrl:
-                              'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
+                        const SizedBox(height: 32),
+                        // Essential Range Products (2 products)
+                        Center(
+                          child: Wrap(
+                            spacing: 16,
+                            runSpacing: 24,
+                            alignment: WrapAlignment.center,
+                            children: const [
+                              SizedBox(
+                                width: 350,
+                                height: 320,
+                                child: ProductCard(
+                                  title: 'Placeholder Product 1',
+                                  price: '£10.00',
+                                  imageUrl:
+                                      'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
+                                ),
+                              ),
+                              SizedBox(
+                                width: 350,
+                                height: 320,
+                                child: ProductCard(
+                                  title: 'Placeholder Product 2',
+                                  price: '£15.00',
+                                  imageUrl:
+                                      'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                        ProductCard(
-                          title: 'Placeholder Product 3',
-                          price: '£20.00',
-                          imageUrl:
-                              'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
+                        const SizedBox(height: 60),
+
+                        // Signature Range Title
+                        const Text(
+                          'SIGNATURE RANGE',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                            letterSpacing: 1,
+                          ),
                         ),
-                        ProductCard(
-                          title: 'Placeholder Product 4',
-                          price: '£25.00',
-                          imageUrl:
-                              'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
+                        const SizedBox(height: 32),
+                        // Signature Range Products (2 products)
+                        Center(
+                          child: Wrap(
+                            spacing: 16,
+                            runSpacing: 24,
+                            alignment: WrapAlignment.center,
+                            children: const [
+                              SizedBox(
+                                width: 350,
+                                height: 320,
+                                child: ProductCard(
+                                  title: 'Placeholder Product 3',
+                                  price: '£20.00',
+                                  imageUrl:
+                                      'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
+                                ),
+                              ),
+                              SizedBox(
+                                width: 350,
+                                height: 320,
+                                child: ProductCard(
+                                  title: 'Placeholder Product 4',
+                                  price: '£25.00',
+                                  imageUrl:
+                                      'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 60),
+
+                        // Portsmouth City Collection Title
+                        const Text(
+                          'PORTSMOUTH CITY COLLECTION',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                            letterSpacing: 1,
+                          ),
+                        ),
+                        const SizedBox(height: 32),
+                        // Portsmouth City Collection Products (4 products)
+                        Center(
+                          child: ConstrainedBox(
+                            constraints: const BoxConstraints(maxWidth: 732),
+                            child: Wrap(
+                              spacing: 16,
+                              runSpacing: 24,
+                              alignment: WrapAlignment.start,
+                              children: const [
+                                SizedBox(
+                                  width: 350,
+                                  height: 320,
+                                  child: ProductCard(
+                                    title: 'Portsmouth City Product 1',
+                                    price: '£12.00',
+                                    imageUrl:
+                                        'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 350,
+                                  height: 320,
+                                  child: ProductCard(
+                                    title: 'Portsmouth City Product 2',
+                                    price: '£16.00',
+                                    imageUrl:
+                                        'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 350,
+                                  height: 320,
+                                  child: ProductCard(
+                                    title: 'Portsmouth City Product 3',
+                                    price: '£14.00',
+                                    imageUrl:
+                                        'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 350,
+                                  height: 320,
+                                  child: ProductCard(
+                                    title: 'Portsmouth City Product 4',
+                                    price: '£18.00',
+                                    imageUrl:
+                                        'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 48),
+
+                        // View All Button
+                        ElevatedButton(
+                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF4d2963),
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 60, vertical: 20),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                          ),
+                          child: const Text(
+                            'VIEW ALL',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 1,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 60),
+
+                        // Our Range Title
+                        const Text(
+                          'OUR RANGE',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                            letterSpacing: 1,
+                          ),
+                        ),
+                        const SizedBox(height: 48),
+
+                        // Our Range Categories (4 columns)
+                        GridView.count(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          crossAxisCount:
+                              MediaQuery.of(context).size.width > 900
+                                  ? 4
+                                  : MediaQuery.of(context).size.width > 600
+                                      ? 2
+                                      : 1,
+                          crossAxisSpacing: 24,
+                          mainAxisSpacing: 24,
+                          childAspectRatio: 1,
+                          children: [
+                            _buildCategoryCard('CLOTHING'),
+                            _buildCategoryCard('MERCHANDISE'),
+                            _buildCategoryCard('GRADUATION'),
+                            _buildCategoryCard('SALE'),
+                          ],
+                        ),
+                        const SizedBox(height: 60),
+
+                        // Add Personal Touch Section
+                        LayoutBuilder(
+                          builder: (context, constraints) {
+                            final isSmallScreen =
+                                MediaQuery.of(context).size.width < 800;
+
+                            if (isSmallScreen) {
+                              // Mobile layout: Image on top, text below
+                              return Column(
+                                children: [
+                                  // Image placeholder
+                                  AspectRatio(
+                                    aspectRatio: 1,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey[300],
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 32),
+                                  // Text and button
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        'Add a Personal Touch',
+                                        style: TextStyle(
+                                          fontSize: 26,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.grey,
+                                          letterSpacing: 1,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 16),
+                                      const Text(
+                                        'First add your item of clothing to your cart then click below to add your text! One line of text contains 10 characters!',
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          color: Colors.grey,
+                                          height: 1.5,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 24),
+                                      ElevatedButton(
+                                        onPressed: () {},
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor:
+                                              const Color(0xFF4d2963),
+                                          foregroundColor: Colors.white,
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 40,
+                                            vertical: 16,
+                                          ),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                          ),
+                                        ),
+                                        child: const Text(
+                                          'CLICK HERE TO ADD TEXT!',
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold,
+                                            letterSpacing: 1,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              );
+                            } else {
+                              // Desktop layout: Text on left, image on right
+                              return Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  // Text and button side
+                                  Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(right: 40),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          const Text(
+                                            'Add a Personal Touch',
+                                            style: TextStyle(
+                                              fontSize: 26,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.grey,
+                                              letterSpacing: 1,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 16),
+                                          const Text(
+                                            'First add your item of clothing to your cart then click below to add your text! One line of text contains 10 characters!',
+                                            style: TextStyle(
+                                              fontSize: 18,
+                                              color: Colors.grey,
+                                              height: 1.5,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 24),
+                                          ElevatedButton(
+                                            onPressed: () {},
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor:
+                                                  const Color(0xFF4d2963),
+                                              foregroundColor: Colors.white,
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                horizontal: 40,
+                                                vertical: 16,
+                                              ),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(4),
+                                              ),
+                                            ),
+                                            child: const Text(
+                                              'CLICK HERE TO ADD TEXT!',
+                                              style: TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.bold,
+                                                letterSpacing: 1,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  // Image placeholder
+                                  Expanded(
+                                    child: AspectRatio(
+                                      aspectRatio: 1,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey[300],
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            }
+                          },
                         ),
                       ],
                     ),
-                  ],
+                  ),
                 ),
               ),
             ),
@@ -443,17 +787,21 @@ class ProductCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
-            child: Image.network(
-              imageUrl,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                return Container(
-                  color: Colors.grey[300],
-                  child: const Center(
-                    child: Icon(Icons.image_not_supported, color: Colors.grey),
-                  ),
-                );
-              },
+            child: Container(
+              alignment: Alignment.center,
+              child: Image.network(
+                imageUrl,
+                fit: BoxFit.contain,
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    color: Colors.grey[300],
+                    child: const Center(
+                      child:
+                          Icon(Icons.image_not_supported, color: Colors.grey),
+                    ),
+                  );
+                },
+              ),
             ),
           ),
           Column(
