@@ -50,38 +50,44 @@ class _ProductPageState extends State<ProductPage> {
             ),
 
             // Product content
-            Container(
-              color: Colors.white,
-              padding: const EdgeInsets.all(40),
-              child: Center(
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 1200),
-                  child: isDesktop
-                      ? Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // Left side - Images
-                            Expanded(
-                              flex: 1,
-                              child: _buildImageSection(),
+            LayoutBuilder(
+              builder: (context, constraints) {
+                final screenWidth = MediaQuery.of(context).size.width;
+                final padding = screenWidth < 600 ? 16.0 : 40.0;
+                return Container(
+                  color: Colors.white,
+                  padding: EdgeInsets.all(padding),
+                  child: Center(
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 1200),
+                      child: isDesktop
+                          ? Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // Left side - Images
+                                Expanded(
+                                  flex: 1,
+                                  child: _buildImageSection(),
+                                ),
+                                const SizedBox(width: 60),
+                                // Right side - Product details
+                                Expanded(
+                                  flex: 1,
+                                  child: _buildProductDetails(),
+                                ),
+                              ],
+                            )
+                          : Column(
+                              children: [
+                                _buildImageSection(),
+                                const SizedBox(height: 32),
+                                _buildProductDetails(),
+                              ],
                             ),
-                            const SizedBox(width: 60),
-                            // Right side - Product details
-                            Expanded(
-                              flex: 1,
-                              child: _buildProductDetails(),
-                            ),
-                          ],
-                        )
-                      : Column(
-                          children: [
-                            _buildImageSection(),
-                            const SizedBox(height: 32),
-                            _buildProductDetails(),
-                          ],
-                        ),
-                ),
-              ),
+                    ),
+                  ),
+                );
+              },
             ),
 
             // Footer
@@ -93,11 +99,15 @@ class _ProductPageState extends State<ProductPage> {
   }
 
   Widget _buildImageSection() {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final imageHeight = screenWidth < 600 ? 300.0 : 500.0;
+    final thumbnailSize = screenWidth < 600 ? 60.0 : 80.0;
+
     return Column(
       children: [
         // Main image
         Container(
-          height: 500,
+          height: imageHeight,
           decoration: BoxDecoration(
             color: Colors.grey[200],
             borderRadius: BorderRadius.circular(8),
@@ -133,8 +143,8 @@ class _ProductPageState extends State<ProductPage> {
                   });
                 },
                 child: Container(
-                  width: 80,
-                  height: 80,
+                  width: thumbnailSize,
+                  height: thumbnailSize,
                   decoration: BoxDecoration(
                     border: Border.all(
                       color: _selectedImageIndex == index

@@ -37,12 +37,20 @@ class AppNavbar extends StatelessWidget {
           // Top banner
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.symmetric(vertical: 8),
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
             color: const Color(0xFF4d2963),
-            child: const Text(
-              'BIG SALE! OUR ESSENTIAL RANGE HAS DROPPED IN PRICE! OVER 20% OFF! COME GRAB YOURS WHILE STOCK LASTS!',
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.white, fontSize: 16),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final screenWidth = MediaQuery.of(context).size.width;
+                return Text(
+                  'BIG SALE! OUR ESSENTIAL RANGE HAS DROPPED IN PRICE! OVER 20% OFF! COME GRAB YOURS WHILE STOCK LASTS!',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: screenWidth < 600 ? 12 : 16,
+                  ),
+                );
+              },
             ),
           ),
           // Main header
@@ -56,37 +64,46 @@ class AppNavbar extends StatelessWidget {
                       .clamp(22.0, 35.0);
 
               return Container(
-                height: 80,
+                height: isSmallScreen ? 60 : 80,
                 padding: EdgeInsets.symmetric(
-                    horizontal: screenWidth < 650 ? 16 : 24),
+                    horizontal: screenWidth < 650 ? 8 : 24),
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    GestureDetector(
-                      onTap: () {
-                        navigateToHome(context);
-                      },
-                      child: Image.network(
-                        'https://shop.upsu.net/cdn/shop/files/upsu_300x300.png?v=1614735854',
-                        height: logoHeight,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) {
-                          return Container(
-                            color: Colors.grey[300],
-                            width: logoHeight,
-                            height: logoHeight,
-                            child: const Center(
-                              child: Icon(Icons.image_not_supported,
-                                  color: Colors.grey),
-                            ),
-                          );
+                    Flexible(
+                      flex: 0,
+                      child: GestureDetector(
+                        onTap: () {
+                          navigateToHome(context);
                         },
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(
+                            maxWidth: screenWidth * 0.25,
+                          ),
+                          child: Image.network(
+                            'https://shop.upsu.net/cdn/shop/files/upsu_300x300.png?v=1614735854',
+                            height: logoHeight,
+                            fit: BoxFit.contain,
+                            errorBuilder: (context, error, stackTrace) {
+                              return Container(
+                                color: Colors.grey[300],
+                                width: logoHeight,
+                                height: logoHeight,
+                                child: const Center(
+                                  child: Icon(Icons.image_not_supported,
+                                      color: Colors.grey),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
                       ),
                     ),
-                    SizedBox(width: screenWidth < 650 ? 8 : 16),
-                    if (screenWidth >= 650)
+                    if (screenWidth >= 900) ...[
+                      const SizedBox(width: 16),
                       Expanded(
                         child: Wrap(
-                          spacing: 12,
+                          spacing: 8,
                           runSpacing: 8,
                           alignment: WrapAlignment.center,
                           crossAxisAlignment: WrapCrossAlignment.center,
@@ -161,114 +178,119 @@ class AppNavbar extends StatelessWidget {
                           ],
                         ),
                       ),
-                    SizedBox(width: screenWidth < 650 ? 8 : 16),
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        IconButton(
-                          icon: Icon(
-                            Icons.search,
-                            size: isSmallScreen ? 28.0 : 18.0,
-                            color: Colors.grey,
-                          ),
-                          padding: const EdgeInsets.all(8),
-                          constraints: BoxConstraints(
-                            minWidth: isSmallScreen ? 48.0 : 32.0,
-                            minHeight: isSmallScreen ? 48.0 : 32.0,
-                          ),
-                          onPressed: placeholderCallbackForButtons,
-                        ),
-                        IconButton(
-                          icon: Icon(
-                            Icons.person_outline,
-                            size: isSmallScreen ? 28.0 : 18.0,
-                            color: Colors.grey,
-                          ),
-                          padding: const EdgeInsets.all(8),
-                          constraints: BoxConstraints(
-                            minWidth: isSmallScreen ? 48.0 : 32.0,
-                            minHeight: isSmallScreen ? 48.0 : 32.0,
-                          ),
-                          onPressed: () {
-                            navigateToSignIn(context);
-                          },
-                        ),
-                        IconButton(
-                          icon: Icon(
-                            Icons.shopping_bag_outlined,
-                            size: isSmallScreen ? 28.0 : 18.0,
-                            color: Colors.grey,
-                          ),
-                          padding: const EdgeInsets.all(8),
-                          constraints: BoxConstraints(
-                            minWidth: isSmallScreen ? 48.0 : 32.0,
-                            minHeight: isSmallScreen ? 48.0 : 32.0,
-                          ),
-                          onPressed: placeholderCallbackForButtons,
-                        ),
-                        if (isSmallScreen)
-                          PopupMenuButton<String>(
+                      const SizedBox(width: 16),
+                    ] else
+                      const Spacer(),
+                    Flexible(
+                      flex: 0,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
                             icon: Icon(
-                              Icons.menu,
-                              size: isSmallScreen ? 28.0 : 18.0,
+                              Icons.search,
+                              size: screenWidth < 900 ? 22.0 : 18.0,
                               color: Colors.grey,
                             ),
-                            padding: const EdgeInsets.all(8),
+                            padding: EdgeInsets.all(screenWidth < 900 ? 2 : 8),
                             constraints: BoxConstraints(
-                              minWidth: isSmallScreen ? 48.0 : 32.0,
-                              minHeight: isSmallScreen ? 48.0 : 32.0,
+                              minWidth: screenWidth < 900 ? 36.0 : 32.0,
+                              minHeight: screenWidth < 900 ? 36.0 : 32.0,
                             ),
-                            onSelected: (value) {
-                              switch (value) {
-                                case 'home':
-                                  navigateToHome(context);
-                                  break;
-                                case 'shop':
-                                  navigateToCollections(context);
-                                  break;
-                                case 'print_shack':
-                                  navigateToPrintShack(context);
-                                  break;
-                                case 'sale':
-                                  navigateToHome(context);
-                                  break;
-                                case 'about':
-                                  navigateToAbout(context);
-                                  break;
-                                case 'upsu':
-                                  navigateToHome(context);
-                                  break;
-                              }
-                            },
-                            itemBuilder: (BuildContext context) =>
-                                <PopupMenuEntry<String>>[
-                              const PopupMenuItem<String>(
-                                value: 'home',
-                                child: Text('Home'),
-                              ),
-                              const PopupMenuItem<String>(
-                                value: 'shop',
-                                child: Text('Shop'),
-                              ),
-                              const PopupMenuItem<String>(
-                                value: 'print_shack',
-                                child: Text('The Print Shack'),
-                              ),
-                              const PopupMenuItem<String>(
-                                value: 'sale',
-                                child: Text('SALE!'),
-                              ),
-                              const PopupMenuItem<String>(
-                                value: 'about',
-                                child: Text('About'),
-                              ),
-                              const PopupMenuItem<String>(
-                                value: 'upsu',
-                                child: Text('UPSU.net'),
-                              ),
-                            ],
+                            onPressed: placeholderCallbackForButtons,
                           ),
-                      ],
+                          IconButton(
+                            icon: Icon(
+                              Icons.person_outline,
+                              size: screenWidth < 900 ? 22.0 : 18.0,
+                              color: Colors.grey,
+                            ),
+                            padding: EdgeInsets.all(screenWidth < 900 ? 2 : 8),
+                            constraints: BoxConstraints(
+                              minWidth: screenWidth < 900 ? 36.0 : 32.0,
+                              minHeight: screenWidth < 900 ? 36.0 : 32.0,
+                            ),
+                            onPressed: () {
+                              navigateToSignIn(context);
+                            },
+                          ),
+                          IconButton(
+                            icon: Icon(
+                              Icons.shopping_bag_outlined,
+                              size: screenWidth < 900 ? 22.0 : 18.0,
+                              color: Colors.grey,
+                            ),
+                            padding: EdgeInsets.all(screenWidth < 900 ? 2 : 8),
+                            constraints: BoxConstraints(
+                              minWidth: screenWidth < 900 ? 36.0 : 32.0,
+                              minHeight: screenWidth < 900 ? 36.0 : 32.0,
+                            ),
+                            onPressed: placeholderCallbackForButtons,
+                          ),
+                          if (screenWidth < 900)
+                            PopupMenuButton<String>(
+                              icon: Icon(
+                                Icons.menu,
+                                size: 22.0,
+                                color: Colors.grey,
+                              ),
+                              padding: const EdgeInsets.all(2),
+                              constraints: const BoxConstraints(
+                                minWidth: 36.0,
+                                minHeight: 36.0,
+                              ),
+                              onSelected: (value) {
+                                switch (value) {
+                                  case 'home':
+                                    navigateToHome(context);
+                                    break;
+                                  case 'shop':
+                                    navigateToCollections(context);
+                                    break;
+                                  case 'print_shack':
+                                    navigateToPrintShack(context);
+                                    break;
+                                  case 'sale':
+                                    navigateToHome(context);
+                                    break;
+                                  case 'about':
+                                    navigateToAbout(context);
+                                    break;
+                                  case 'upsu':
+                                    navigateToHome(context);
+                                    break;
+                                }
+                              },
+                              itemBuilder: (BuildContext context) =>
+                                  <PopupMenuEntry<String>>[
+                                const PopupMenuItem<String>(
+                                  value: 'home',
+                                  child: Text('Home'),
+                                ),
+                                const PopupMenuItem<String>(
+                                  value: 'shop',
+                                  child: Text('Shop'),
+                                ),
+                                const PopupMenuItem<String>(
+                                  value: 'print_shack',
+                                  child: Text('The Print Shack'),
+                                ),
+                                const PopupMenuItem<String>(
+                                  value: 'sale',
+                                  child: Text('SALE!'),
+                                ),
+                                const PopupMenuItem<String>(
+                                  value: 'about',
+                                  child: Text('About'),
+                                ),
+                                const PopupMenuItem<String>(
+                                  value: 'upsu',
+                                  child: Text('UPSU.net'),
+                                ),
+                              ],
+                            ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
