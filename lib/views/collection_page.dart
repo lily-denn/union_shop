@@ -82,13 +82,13 @@ class _CollectionPageState extends State<CollectionPage> {
                       ),
 
                       // Filter and Sort Bar
-                      Center(
-                        child: ConstrainedBox(
-                          constraints: const BoxConstraints(maxWidth: 1200),
-                          child: screenWidth < 600
-                              ? Row(
-                                  children: [
-                                    _buildDropdown(
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        child: screenWidth < 600
+                            ? Row(
+                                children: [
+                                  Expanded(
+                                    child: _buildDropdown(
                                       label: 'FILTER BY',
                                       value: _filterBy,
                                       items: _filterOptions,
@@ -106,8 +106,10 @@ class _CollectionPageState extends State<CollectionPage> {
                                         });
                                       },
                                     ),
-                                    const SizedBox(width: 16),
-                                    _buildDropdown(
+                                  ),
+                                  const SizedBox(width: 16),
+                                  Expanded(
+                                    child: _buildDropdown(
                                       label: 'SORT BY',
                                       value: _sortBy,
                                       items: _sortOptions,
@@ -125,58 +127,58 @@ class _CollectionPageState extends State<CollectionPage> {
                                         });
                                       },
                                     ),
-                                  ],
-                                )
-                              : Row(
-                                  children: [
-                                    _buildDropdown(
-                                      label: 'FILTER BY',
-                                      value: _filterBy,
-                                      items: _filterOptions,
-                                      isOpen: _filterMenuOpen,
-                                      isMobile: false,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          _filterBy = value!;
-                                          _filterMenuOpen = false;
-                                        });
-                                      },
-                                      onOpenChanged: (isOpen) {
-                                        setState(() {
-                                          _filterMenuOpen = isOpen;
-                                        });
-                                      },
+                                  ),
+                                ],
+                              )
+                            : Row(
+                                children: [
+                                  _buildDropdown(
+                                    label: 'FILTER BY',
+                                    value: _filterBy,
+                                    items: _filterOptions,
+                                    isOpen: _filterMenuOpen,
+                                    isMobile: false,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _filterBy = value!;
+                                        _filterMenuOpen = false;
+                                      });
+                                    },
+                                    onOpenChanged: (isOpen) {
+                                      setState(() {
+                                        _filterMenuOpen = isOpen;
+                                      });
+                                    },
+                                  ),
+                                  const SizedBox(width: 16),
+                                  _buildDropdown(
+                                    label: 'SORT BY',
+                                    value: _sortBy,
+                                    items: _sortOptions,
+                                    isOpen: _sortMenuOpen,
+                                    isMobile: false,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _sortBy = value!;
+                                        _sortMenuOpen = false;
+                                      });
+                                    },
+                                    onOpenChanged: (isOpen) {
+                                      setState(() {
+                                        _sortMenuOpen = isOpen;
+                                      });
+                                    },
+                                  ),
+                                  const Spacer(),
+                                  Text(
+                                    '17 products',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.grey[700],
                                     ),
-                                    const SizedBox(width: 16),
-                                    _buildDropdown(
-                                      label: 'SORT BY',
-                                      value: _sortBy,
-                                      items: _sortOptions,
-                                      isOpen: _sortMenuOpen,
-                                      isMobile: false,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          _sortBy = value!;
-                                          _sortMenuOpen = false;
-                                        });
-                                      },
-                                      onOpenChanged: (isOpen) {
-                                        setState(() {
-                                          _sortMenuOpen = isOpen;
-                                        });
-                                      },
-                                    ),
-                                    const Spacer(),
-                                    Text(
-                                      '17 products',
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.grey[700],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                        ),
+                                  ),
+                                ],
+                              ),
                       ),
 
                       // Second Divider
@@ -226,51 +228,70 @@ class _CollectionPageState extends State<CollectionPage> {
                                 gridDelegate:
                                     SliverGridDelegateWithFixedCrossAxisCount(
                                   crossAxisCount: crossAxisCount,
-                                  crossAxisSpacing: screenWidth < 600 ? 12 : 24,
-                                  mainAxisSpacing: 32,
+                                  crossAxisSpacing: screenWidth < 600 ? 4 : 24,
+                                  mainAxisSpacing: screenWidth < 600 ? 16 : 32,
                                   childAspectRatio:
-                                      screenWidth < 600 ? 0.9 : 1.1,
+                                      screenWidth < 600 ? 0.85 : 1.1,
                                 ),
                                 itemCount: _productsPerPage,
                                 itemBuilder: (context, index) {
-                                  return Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      AspectRatio(
-                                        aspectRatio: 1.4,
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            color: Colors.grey[300],
-                                          ),
-                                          child: Center(
-                                            child: Text(
-                                              'Product ${(_currentPage - 1) * 9 + index + 1}',
-                                              style: const TextStyle(
-                                                fontSize: 16,
-                                                color: Colors.grey,
+                                  return LayoutBuilder(
+                                    builder: (context, constraints) {
+                                      return Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Flexible(
+                                            flex: 7,
+                                            child: Container(
+                                              width: double.infinity,
+                                              decoration: BoxDecoration(
+                                                color: Colors.grey[300],
+                                              ),
+                                              child: Center(
+                                                child: Text(
+                                                  'Product ${(_currentPage - 1) * 9 + index + 1}',
+                                                  style: const TextStyle(
+                                                    fontSize: 16,
+                                                    color: Colors.grey,
+                                                  ),
+                                                ),
                                               ),
                                             ),
                                           ),
-                                        ),
-                                      ),
-                                      const SizedBox(height: 12),
-                                      Text(
-                                        'Placeholder Product Title',
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.grey[800],
-                                        ),
-                                      ),
-                                      const SizedBox(height: 4),
-                                      Text(
-                                        '£20.00',
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.grey[700],
-                                        ),
-                                      ),
-                                    ],
+                                          const SizedBox(height: 12),
+                                          Flexible(
+                                            flex: 2,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Text(
+                                                  'Placeholder Product Title',
+                                                  style: TextStyle(
+                                                    fontSize: 14,
+                                                    color: Colors.grey[800],
+                                                  ),
+                                                  maxLines: 2,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                                const SizedBox(height: 4),
+                                                Text(
+                                                  '£20.00',
+                                                  style: TextStyle(
+                                                    fontSize: 14,
+                                                    color: Colors.grey[700],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    },
                                   );
                                 },
                               );
@@ -395,6 +416,7 @@ class _CollectionPageState extends State<CollectionPage> {
             ),
             color: Colors.white,
             child: Container(
+              width: double.infinity,
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -404,13 +426,16 @@ class _CollectionPageState extends State<CollectionPage> {
                 ),
               ),
               child: Row(
-                mainAxisSize: MainAxisSize.min,
+                mainAxisSize: MainAxisSize.max,
                 children: [
-                  Text(
-                    value,
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 14,
+                  Expanded(
+                    child: Text(
+                      value,
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                      ),
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                   const SizedBox(width: 4),

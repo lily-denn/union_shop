@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:union_shop/views/salecollection_page.dart';
 
 class AppNavbar extends StatelessWidget {
   const AppNavbar({super.key});
@@ -144,7 +145,13 @@ class AppNavbar extends StatelessWidget {
                             ),
                             TextButton(
                               onPressed: () {
-                                navigateToHome(context);
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const CollectionPage(),
+                                  ),
+                                );
                               },
                               style: TextButton.styleFrom(
                                   padding: const EdgeInsets.symmetric(
@@ -251,7 +258,13 @@ class AppNavbar extends StatelessWidget {
                                     navigateToPrintShack(context);
                                     break;
                                   case 'sale':
-                                    navigateToHome(context);
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const CollectionPage(),
+                                      ),
+                                    );
                                     break;
                                   case 'about':
                                     navigateToAbout(context);
