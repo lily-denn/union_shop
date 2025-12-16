@@ -200,81 +200,68 @@ class AppNavbar extends StatelessWidget {
                               ),
                               onPressed: placeholderCallbackForButtons,
                             ),
-                            isSmallScreen
-                                ? PopupMenuButton<String>(
-                                    icon: Icon(
-                                      Icons.menu,
-                                      size: iconSize,
-                                      color: Colors.grey,
-                                    ),
-                                    padding: const EdgeInsets.all(8),
-                                    constraints: BoxConstraints(
-                                      minWidth: buttonSize,
-                                      minHeight: buttonSize,
-                                    ),
-                                    onSelected: (value) {
-                                      switch (value) {
-                                        case 'home':
-                                          navigateToHome(context);
-                                          break;
-                                        case 'shop':
-                                          navigateToHome(context);
-                                          break;
-                                        case 'print_shack':
-                                          navigateToHome(context);
-                                          break;
-                                        case 'sale':
-                                          navigateToHome(context);
-                                          break;
-                                        case 'about':
-                                          navigateToAbout(context);
-                                          break;
-                                        case 'upsu':
-                                          navigateToHome(context);
-                                          break;
-                                      }
-                                    },
-                                    itemBuilder: (BuildContext context) =>
-                                        <PopupMenuEntry<String>>[
-                                      const PopupMenuItem<String>(
-                                        value: 'home',
-                                        child: Text('Home'),
-                                      ),
-                                      const PopupMenuItem<String>(
-                                        value: 'shop',
-                                        child: Text('Shop'),
-                                      ),
-                                      const PopupMenuItem<String>(
-                                        value: 'print_shack',
-                                        child: Text('The Print Shack'),
-                                      ),
-                                      const PopupMenuItem<String>(
-                                        value: 'sale',
-                                        child: Text('SALE!'),
-                                      ),
-                                      const PopupMenuItem<String>(
-                                        value: 'about',
-                                        child: Text('About'),
-                                      ),
-                                      const PopupMenuItem<String>(
-                                        value: 'upsu',
-                                        child: Text('UPSU.net'),
-                                      ),
-                                    ],
-                                  )
-                                : IconButton(
-                                    icon: Icon(
-                                      Icons.menu,
-                                      size: iconSize,
-                                      color: Colors.grey,
-                                    ),
-                                    padding: const EdgeInsets.all(8),
-                                    constraints: BoxConstraints(
-                                      minWidth: buttonSize,
-                                      minHeight: buttonSize,
-                                    ),
-                                    onPressed: placeholderCallbackForButtons,
+                            if (isSmallScreen)
+                              PopupMenuButton<String>(
+                                icon: Icon(
+                                  Icons.menu,
+                                  size: iconSize,
+                                  color: Colors.grey,
+                                ),
+                                padding: const EdgeInsets.all(8),
+                                constraints: BoxConstraints(
+                                  minWidth: buttonSize,
+                                  minHeight: buttonSize,
+                                ),
+                                onSelected: (value) {
+                                  switch (value) {
+                                    case 'home':
+                                      navigateToHome(context);
+                                      break;
+                                    case 'shop':
+                                      navigateToHome(context);
+                                      break;
+                                    case 'print_shack':
+                                      navigateToHome(context);
+                                      break;
+                                    case 'sale':
+                                      navigateToHome(context);
+                                      break;
+                                    case 'about':
+                                      navigateToAbout(context);
+                                      break;
+                                    case 'upsu':
+                                      navigateToHome(context);
+                                      break;
+                                  }
+                                },
+                                itemBuilder: (BuildContext context) =>
+                                    <PopupMenuEntry<String>>[
+                                  const PopupMenuItem<String>(
+                                    value: 'home',
+                                    child: Text('Home'),
                                   ),
+                                  const PopupMenuItem<String>(
+                                    value: 'shop',
+                                    child: Text('Shop'),
+                                  ),
+                                  const PopupMenuItem<String>(
+                                    value: 'print_shack',
+                                    child: Text('The Print Shack'),
+                                  ),
+                                  const PopupMenuItem<String>(
+                                    value: 'sale',
+                                    child: Text('SALE!'),
+                                  ),
+                                  const PopupMenuItem<String>(
+                                    value: 'about',
+                                    child: Text('About'),
+                                  ),
+                                  const PopupMenuItem<String>(
+                                    value: 'upsu',
+                                    child: Text('UPSU.net'),
+                                  ),
+                                ],
+                              ),
                           ],
                         );
                       },
