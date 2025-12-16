@@ -15,6 +15,10 @@ class AppNavbar extends StatelessWidget {
     Navigator.pushNamed(context, '/print_shack');
   }
 
+  void navigateToCollections(BuildContext context) {
+    Navigator.pushNamed(context, '/collections');
+  }
+
   void placeholderCallbackForButtons() {
     // This is the event handler for buttons that don't work yet
   }
@@ -97,7 +101,7 @@ class AppNavbar extends StatelessWidget {
                             ),
                             TextButton(
                               onPressed: () {
-                                navigateToHome(context);
+                                navigateToCollections(context);
                               },
                               style: TextButton.styleFrom(
                                   padding: const EdgeInsets.symmetric(
@@ -214,7 +218,7 @@ class AppNavbar extends StatelessWidget {
                                   navigateToHome(context);
                                   break;
                                 case 'shop':
-                                  navigateToHome(context);
+                                  navigateToCollections(context);
                                   break;
                                 case 'print_shack':
                                   navigateToPrintShack(context);
