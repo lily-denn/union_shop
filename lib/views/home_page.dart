@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:union_shop/widgets/app_footer.dart';
 import 'package:union_shop/widgets/app_navbar.dart';
+import 'package:union_shop/views/collection_page.dart';
+import 'package:union_shop/views/print_shack_personalisation.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -9,20 +11,30 @@ class HomeScreen extends StatelessWidget {
     // This is the event handler for buttons that don't work yet
   }
 
-  Widget _buildCategoryCard(String label) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.grey[200],
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Center(
-        child: Text(
-          label,
-          style: const TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-            letterSpacing: 1,
+  Widget _buildCategoryCard(BuildContext context, String label) {
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const CollectionPage(),
+          ),
+        );
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.grey[200],
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Center(
+          child: Text(
+            label,
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+              letterSpacing: 1,
+            ),
           ),
         ),
       ),
@@ -353,10 +365,10 @@ class HomeScreen extends StatelessWidget {
                               mainAxisSpacing: 24,
                               childAspectRatio: 1,
                               children: [
-                                _buildCategoryCard('CLOTHING'),
-                                _buildCategoryCard('MERCHANDISE'),
-                                _buildCategoryCard('GRADUATION'),
-                                _buildCategoryCard('SALE'),
+                                _buildCategoryCard(context, 'CLOTHING'),
+                                _buildCategoryCard(context, 'MERCHANDISE'),
+                                _buildCategoryCard(context, 'GRADUATION'),
+                                _buildCategoryCard(context, 'SALE'),
                               ],
                             ),
                             const SizedBox(height: 60),
@@ -421,7 +433,15 @@ class HomeScreen extends StatelessWidget {
                                           ),
                                           const SizedBox(height: 24),
                                           ElevatedButton(
-                                            onPressed: () {},
+                                            onPressed: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const ProductPage(),
+                                                ),
+                                              );
+                                            },
                                             style: ElevatedButton.styleFrom(
                                               backgroundColor:
                                                   const Color(0xFF4d2963),
@@ -486,7 +506,15 @@ class HomeScreen extends StatelessWidget {
                                               ),
                                               const SizedBox(height: 24),
                                               ElevatedButton(
-                                                onPressed: () {},
+                                                onPressed: () {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          const ProductPage(),
+                                                    ),
+                                                  );
+                                                },
                                                 style: ElevatedButton.styleFrom(
                                                   backgroundColor:
                                                       const Color(0xFF4d2963),

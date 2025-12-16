@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:union_shop/views/product_page.dart';
 import 'package:union_shop/views/about_page.dart';
 import 'package:union_shop/views/home_page.dart';
-import 'package:union_shop/views/print_shack.dart';
+import 'package:union_shop/views/print_shack_about.dart';
 import 'package:union_shop/views/collections_page.dart';
 import 'package:union_shop/views/sign_in.dart';
 
