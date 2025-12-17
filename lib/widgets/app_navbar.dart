@@ -12,8 +12,6 @@ class AppNavbar extends StatefulWidget {
 class _AppNavbarState extends State<AppNavbar> {
   final CartService _cartService = CartService();
   bool _mobileMenuOpen = false;
-  bool _printShackHovered = false;
-  bool _showPrintShackSubmenu = false;
 
   @override
   void initState() {
