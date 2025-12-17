@@ -63,18 +63,38 @@ class HomeScreen extends StatelessWidget {
                       // Background image
                       Positioned.fill(
                         child: Container(
-                          decoration: const BoxDecoration(
-                            image: DecorationImage(
-                              image: NetworkImage(
-                                'https://shop.upsu.net/cdn/shop/files/PortsmouthCityPostcard2_1024x1024@2x.jpg?v=1752232561',
-                              ),
-                              fit: BoxFit.cover,
-                            ),
+                          decoration: BoxDecoration(
+                            color: Colors.grey[300],
                           ),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Colors.black.withValues(alpha: 0.7),
-                            ),
+                          child: Image.network(
+                            'https://shop.upsu.net/cdn/shop/files/PortsmouthCityPostcard2_1024x1024@2x.jpg?v=1752232561',
+                            fit: BoxFit.cover,
+                            width: double.infinity,
+                            height: double.infinity,
+                            errorBuilder: (context, error, stackTrace) {
+                              // Silently return empty container on error (e.g., in tests)
+                              return Container(
+                                color: Colors.grey[300],
+                              );
+                            },
+                            frameBuilder: (context, child, frame,
+                                wasSynchronouslyLoaded) {
+                              if (frame == null) {
+                                return Container(color: Colors.grey[300]);
+                              }
+                              return Stack(
+                                fit: StackFit.expand,
+                                children: [
+                                  child,
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color:
+                                          Colors.black.withValues(alpha: 0.7),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
                           ),
                         ),
                       ),
