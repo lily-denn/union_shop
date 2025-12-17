@@ -6,7 +6,6 @@ import 'package:union_shop/views/print_shack_about.dart';
 import 'package:union_shop/views/collections_page.dart';
 import 'package:union_shop/views/sign_in.dart';
 import 'package:union_shop/views/cart_page.dart';
-import 'package:union_shop/views/personalisation.dart';
 
 void main() {
   runApp(const UnionShopApp());

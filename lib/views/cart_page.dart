@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, duplicate_ignore
+
 import 'package:flutter/material.dart';
 import 'package:union_shop/widgets/app_navbar.dart';
 import 'package:union_shop/widgets/app_footer.dart';
@@ -220,6 +222,7 @@ class _CartPageState extends State<CartPage> {
 
         // Column Headers
         Row(
+          // ignore: prefer_const_literals_to_create_immutables
           children: [
             const Expanded(
               flex: 3,
