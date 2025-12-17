@@ -52,9 +52,9 @@ void main() {
       await tester.pumpWidget(createTestWidget());
       await tester.pumpAndSettle();
 
-      // Should display Collection 1 through Collection 12
-      expect(find.text('Collection 1'), findsOneWidget);
-      expect(find.text('Collection 12'), findsOneWidget);
+      // Should display first and last collection
+      expect(find.text('Clothing'), findsOneWidget);
+      expect(find.text('Nike Final Chance'), findsOneWidget);
     });
 
     testWidgets('should display collections in grid layout', (tester) async {
@@ -69,9 +69,9 @@ void main() {
       await tester.pumpWidget(createTestWidget());
       await tester.pumpAndSettle();
 
-      // Each collection card should be wrapped in InkWell
-      final inkWells = find.byType(InkWell);
-      expect(inkWells.evaluate().length, greaterThanOrEqualTo(12));
+      // Each collection card should be wrapped in GestureDetector
+      final gestureDetectors = find.byType(GestureDetector);
+      expect(gestureDetectors.evaluate().length, greaterThanOrEqualTo(12));
     });
 
     testWidgets('should navigate to collection page when card tapped',
@@ -87,13 +87,15 @@ void main() {
       await tester.pumpWidget(createTestWidget());
       await tester.pumpAndSettle();
 
+      // Verify we're on collections page initially
+      expect(find.text('COLLECTIONS'), findsOneWidget);
+
       // Tap on first collection
-      await tester.tap(find.text('Collection 1'));
+      await tester.tap(find.text('Clothing').first);
       await tester.pumpAndSettle();
 
-      // Should navigate to CollectionPage (check for navigation occurred)
-      // The collection page should load (we can check this by verifying new page elements)
-      expect(find.text('Collection 1'), findsNothing);
+      // Should navigate to CollectionPage (check that COLLECTIONS title is gone)
+      expect(find.text('COLLECTIONS'), findsNothing);
     });
 
     testWidgets('should be scrollable', (tester) async {
@@ -129,7 +131,7 @@ void main() {
       expect(find.text('COLLECTIONS'), findsOneWidget);
 
       // Should display collections (2 per row on small screens)
-      expect(find.text('Collection 1'), findsOneWidget);
+      expect(find.text('Clothing'), findsOneWidget);
 
       addTearDown(() => tester.binding.setSurfaceSize(null));
     });
@@ -141,7 +143,7 @@ void main() {
 
       // Should display 3 per row on medium screens
       expect(find.text('COLLECTIONS'), findsOneWidget);
-      expect(find.text('Collection 1'), findsOneWidget);
+      expect(find.text('Clothing'), findsOneWidget);
 
       addTearDown(() => tester.binding.setSurfaceSize(null));
     });
@@ -153,7 +155,7 @@ void main() {
 
       // Should display 3 per row on large screens
       expect(find.text('COLLECTIONS'), findsOneWidget);
-      expect(find.text('Collection 1'), findsOneWidget);
+      expect(find.text('Clothing'), findsOneWidget);
 
       addTearDown(() => tester.binding.setSurfaceSize(null));
     });
@@ -175,30 +177,41 @@ void main() {
       await tester.pumpAndSettle();
 
       // Verify all collections are present
-      for (int i = 1; i <= 12; i++) {
-        expect(find.text('Collection $i'), findsOneWidget);
+      final collections = [
+        'Clothing',
+        'SALE',
+        'Autumn Favourites',
+        'Black Friday',
+        'Essential Range',
+        'Graduation',
+        'Limited Edition Essential Zip Hoodies',
+        'Merchandise',
+        'Personalisation',
+        'Popular',
+        'Pride Collection',
+        'Nike Final Chance',
+      ];
+      for (var collection in collections) {
+        expect(find.text(collection), findsOneWidget);
       }
     });
 
-    testWidgets('collection cards should have gray background', (tester) async {
+    testWidgets('collection cards should have images', (tester) async {
       await tester.pumpWidget(createTestWidget());
       await tester.pumpAndSettle();
 
-      // Find containers that represent collection cards
-      final containers = find.descendant(
-        of: find.byType(InkWell),
-        matching: find.byType(Container),
-      );
-      expect(containers, findsWidgets);
+      // Find images that represent collection cards
+      final images = find.byType(Image);
+      expect(images.evaluate().length, greaterThanOrEqualTo(12));
     });
 
     testWidgets('collection cards should have rounded corners', (tester) async {
       await tester.pumpWidget(createTestWidget());
       await tester.pumpAndSettle();
 
-      // Find InkWell widgets (collection cards)
-      final inkWells = find.byType(InkWell);
-      expect(inkWells.evaluate().length, greaterThanOrEqualTo(12));
+      // Find ClipRRect widgets (collection cards with rounded corners)
+      final clippedCards = find.byType(ClipRRect);
+      expect(clippedCards.evaluate().length, greaterThanOrEqualTo(12));
     });
 
     testWidgets('should adjust grid columns based on screen width',
@@ -284,9 +297,12 @@ void main() {
       await tester.pumpWidget(createTestWidget());
       await tester.pumpAndSettle();
 
+      // Should display collection names
+      expect(find.text('Clothing'), findsOneWidget);
+
       // Each collection card should have centered text
-      expect(find.text('Collection 1'), findsOneWidget);
-      expect(find.text('Collection 2'), findsOneWidget);
+      expect(find.text('SALE'), findsOneWidget);
+      expect(find.text('Popular'), findsOneWidget);
     });
 
     testWidgets('should have proper padding around content', (tester) async {
