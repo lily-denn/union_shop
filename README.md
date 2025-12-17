@@ -22,21 +22,23 @@ Union Shop is a comprehensive e-commerce application built with Flutter that rep
 #### Responsive Navigation Bar
 - **Desktop View (≥900px)**:
   - Full horizontal menu with hover effects and smooth underline animations
-  - Click-to-toggle dropdown for "The Print Shack" section with precise button alignment
+  - Direct navigation links: Home, Shop, The Print Shack, About, SALE!, UPSU.net
   - All navigation links visible in a single row
   - Custom hover states with animated underlines
 
 - **Mobile View (<900px)**:
   - Collapsible hamburger menu with smooth slide-down animation
-  - Expandable "Print Shack" section with ExpansionTile
+  - Stacked menu items with dividers
   - Optimized touch targets for mobile interaction
-  - Automatic menu closure on navigation
+  - Automatic menu closure on navigation and screen resize
 
 - **Common Features**:
   - Promotional banner with sale announcements
-  - Shopping cart, user profile, and search icons
+  - Shopping cart badge showing item count
+  - User profile and search icons
   - Dynamic logo sizing based on screen width
   - Network image loading with error handling
+  - Automatic menu closing when screen transitions between mobile/desktop sizes
 
 #### Footer Component
 - Consistent footer across all pages
@@ -46,10 +48,12 @@ Union Shop is a comprehensive e-commerce application built with Flutter that rep
 ### Pages & Views
 
 #### Home Page (`home_page.dart`)
-- Landing page with featured content
+- Hero section with promotional imagery
+- "Find Out More" button navigating to personalisation services
 - Responsive grid layout
 - Quick access to collections and promotions
 - Adaptive spacing for different screen sizes
+- Category cards for easy navigation
 
 #### Collections & Shopping
 
@@ -59,9 +63,15 @@ Union Shop is a comprehensive e-commerce application built with Flutter that rep
 - Responsive design adapting to screen width
 
 **Individual Collection** (`collection_page.dart`)
-- Display products within a specific collection
+- Display 17 actual products with real names and prices
 - Product grid with images and details
-- Filtering and sorting capabilities
+- Filtering by category (All Products, Clothing, Merchandise)
+- Sorting capabilities:
+  - Alphabetical (A-Z, Z-A)
+  - Price (Low to High, High to Low)
+  - Date Added (Newest, Oldest)
+- Pagination system
+- Click products to navigate to details page
 
 **Sale Collection** (`salecollection_page.dart`)
 - Special sale items with discounted pricing
@@ -106,13 +116,17 @@ Union Shop is a comprehensive e-commerce application built with Flutter that rep
 **About Page** (`print_shack_about.dart`)
 - Information about custom printing services
 - Service details and offerings
-- Contact information
+- Accessible via navbar "The Print Shack" button
+- Full page layout with navbar and footer
 
 **Personalisation** (`personalisation.dart`)
 - Custom product personalization interface
-- Text customization options
-- Design preview
-- Form-based customization
+- Multiple text line options (1-4 lines)
+- Logo placement options (chest/back)
+- Size and quantity selection
+- Real-time price calculation
+- Add to cart functionality
+- Accessible from home page "Find Out More" button
 
 #### Additional Pages
 
@@ -141,17 +155,19 @@ Union Shop is a comprehensive e-commerce application built with Flutter that rep
 #### State Management
 - StatefulWidget for interactive components
 - setState for local state updates
+- CartService with ChangeNotifier for cart state
 - Controller management for form inputs
 - TextEditingController for quantity fields
 - State persistence across rebuilds
+- Listener pattern for cart updates
 
 #### Custom Widgets
 
-**`_UnderlineOnHoverButton`** (navbar)
+**`_buildHoverButton`** (navbar)
 - Hover state detection with MouseRegion
 - Animated text decoration (underline)
 - Custom padding and styling
-- Supports trailing widgets (e.g., dropdown arrow)
+- StatefulBuilder for local hover state
 
 **Cart Item Components**
 - Desktop: `_buildDesktopCartItem()`
@@ -160,18 +176,27 @@ Union Shop is a comprehensive e-commerce application built with Flutter that rep
 
 #### Navigation System
 - Named routes defined in `main.dart`
-- Route paths: `/`, `/about`, `/collections`, `/cart`, `/sign_in`, `/product`, `/print_shack`
+- Route paths:
+  - `/` - Home page
+  - `/about` - About page
+  - `/collections` - Collections overview
+  - `/cart` - Shopping cart
+  - `/sign_in` - Sign in page
+  - `/product` - Product details
+  - `/print_shack` - Print Shack page
+  - `/print_shack_about` - Print Shack about/information
+  - `/personalisation` - Personalisation service
 - Navigation using `Navigator.pushNamed()` and `Navigator.push()`
 - MaterialPageRoute for dynamic page transitions
 - Back navigation support with `Navigator.pop()`
 
 #### UI/UX Features
-- **Overlay System**: Print Shack dropdown using OverlayEntry and LayerLink
-- **Hover Effects**: MouseRegion for desktop hover states
+- **Hover Effects**: MouseRegion for desktop hover states with animated underlines
 - **Touch Interactions**: InkWell and GestureDetector for tap handling
 - **Form Validation**: Input validation for quantities and text fields
 - **Error Handling**: Graceful fallbacks for network images
 - **Loading States**: Proper widget lifecycle management
+- **Responsive Menus**: Automatic menu closure on screen size changes
 
 #### Color Scheme
 - **Primary Purple**: `#4d2963` (brand color)
@@ -355,7 +380,7 @@ README.md                         # This file
 
 ## Testing
 
-The application includes comprehensive test coverage for all pages and widgets, with **177 passing tests**.
+The application includes comprehensive test coverage for all pages and widgets, with **222 passing tests**.
 
 ### Running Tests
 
