@@ -21,10 +21,10 @@ class _ProductPageState extends State<ProductPage> {
   final List<String> _colors = ['Baby Pink', 'Stone Blue', 'Black', 'Grey'];
   final List<String> _sizes = ['S', 'M', 'L'];
   final List<String> _productImages = [
-    'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
-    'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
-    'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
-    'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
+    'https://shop.upsu.net/cdn/shop/files/Pink_Essential_Hoodie_2a3589c2-096f-479f-ac60-d41e8a853d04_1024x1024@2x.jpg?v=1749131089',
+    'https://shop.upsu.net/cdn/shop/files/1000045774_07de1185-b921-47fa-b3a8-b1823478ca2b_1024x1024@2x.jpg?v=1749131089',
+    'https://shop.upsu.net/cdn/shop/files/Baby_Pink_Shopify_Image_1024x1024@2x.png?v=1749460435',
+    'https://shop.upsu.net/cdn/shop/files/Blue_Stone_Shopify_Image_1024x1024@2x.png?v=1749460441',
   ];
 
   @override

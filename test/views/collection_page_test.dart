@@ -61,15 +61,20 @@ void main() {
       expect(find.text('Page 1 of 2'), findsOneWidget);
     });
 
-    testWidgets('should display 12 products per page', (tester) async {
+    testWidgets('should display actual product names and prices',
+        (tester) async {
       tester.view.physicalSize = const Size(1200, 2400);
       tester.view.devicePixelRatio = 1.0;
       await tester.pumpWidget(createTestWidget());
       await tester.pumpAndSettle();
 
-      // Should show 9 products on first page
-      expect(find.text('Product 1'), findsOneWidget);
-      expect(find.text('Product 9'), findsOneWidget);
+      // Should show first 9 products on page 1
+      expect(find.text('Classic Hoodies'), findsOneWidget);
+      expect(find.text('£25.00'), findsOneWidget);
+      expect(find.text('Classic Sweatshirts'), findsOneWidget);
+      expect(find.text('£23.00'), findsOneWidget);
+      expect(find.text('Classic T-Shirts'), findsOneWidget);
+      expect(find.text('£11.00'), findsOneWidget);
     });
 
     testWidgets('should navigate to page 2 when next arrow clicked',
@@ -168,6 +173,286 @@ void main() {
 
       // Check that GridView exists
       expect(find.byType(GridView), findsOneWidget);
+    });
+
+    testWidgets('should filter products by Clothing category', (tester) async {
+      tester.view.physicalSize = const Size(1200, 2400);
+      tester.view.devicePixelRatio = 1.0;
+      await tester.pumpWidget(createTestWidget());
+      await tester.pumpAndSettle();
+
+      // Initially shows all 17 products
+      expect(find.text('17 products'), findsOneWidget);
+
+      // Tap filter dropdown
+      final filterDropdown = find.ancestor(
+        of: find.text('All products'),
+        matching: find.byType(InkWell),
+      );
+      await tester.tap(filterDropdown.first);
+      await tester.pumpAndSettle();
+
+      // Select Clothing
+      await tester.tap(find.text('Clothing').last);
+      await tester.pumpAndSettle();
+
+      // Should show 14 clothing products
+      expect(find.text('14 products'), findsOneWidget);
+    });
+
+    testWidgets('should filter products by Merchandise category',
+        (tester) async {
+      tester.view.physicalSize = const Size(1200, 2400);
+      tester.view.devicePixelRatio = 1.0;
+      await tester.pumpWidget(createTestWidget());
+      await tester.pumpAndSettle();
+
+      // Tap filter dropdown
+      final filterDropdown = find.ancestor(
+        of: find.text('All products'),
+        matching: find.byType(InkWell),
+      );
+      await tester.tap(filterDropdown.first);
+      await tester.pumpAndSettle();
+
+      // Select Merchandise
+      await tester.tap(find.text('Merchandise'));
+      await tester.pumpAndSettle();
+
+      // Should show 3 merchandise products
+      expect(find.text('3 products'), findsOneWidget);
+      expect(find.text('Classic Cap'), findsOneWidget);
+      expect(find.text('Classic Beanie Hat'), findsOneWidget);
+      expect(find.text('Limited Edition UoP Beanies'), findsOneWidget);
+    });
+
+    testWidgets('should sort products alphabetically A-Z', (tester) async {
+      tester.view.physicalSize = const Size(1200, 2400);
+      tester.view.devicePixelRatio = 1.0;
+      await tester.pumpWidget(createTestWidget());
+      await tester.pumpAndSettle();
+
+      // Tap sort dropdown
+      final sortDropdown = find.ancestor(
+        of: find.text('Featured'),
+        matching: find.byType(InkWell),
+      );
+      await tester.tap(sortDropdown.first);
+      await tester.pumpAndSettle();
+
+      // Select Alphabetically, A-Z
+      await tester.tap(find.text('Alphabetically, A–Z'));
+      await tester.pumpAndSettle();
+
+      // First product should now be "Classic Beanie Hat"
+      expect(find.text('Classic Beanie Hat'), findsOneWidget);
+    });
+
+    testWidgets('should sort products alphabetically Z-A', (tester) async {
+      tester.view.physicalSize = const Size(1200, 2400);
+      tester.view.devicePixelRatio = 1.0;
+      await tester.pumpWidget(createTestWidget());
+      await tester.pumpAndSettle();
+
+      // Tap sort dropdown
+      final sortDropdown = find.ancestor(
+        of: find.text('Featured'),
+        matching: find.byType(InkWell),
+      );
+      await tester.tap(sortDropdown.first);
+      await tester.pumpAndSettle();
+
+      // Select Alphabetically, Z-A
+      await tester.tap(find.text('Alphabetically, Z–A'));
+      await tester.pumpAndSettle();
+
+      // First product should now be "Waterproof Poncho"
+      expect(find.text('Waterproof Poncho'), findsOneWidget);
+    });
+
+    testWidgets('should sort products by price low to high', (tester) async {
+      tester.view.physicalSize = const Size(1200, 2400);
+      tester.view.devicePixelRatio = 1.0;
+      await tester.pumpWidget(createTestWidget());
+      await tester.pumpAndSettle();
+
+      // Tap sort dropdown
+      final sortDropdown = find.ancestor(
+        of: find.text('Featured'),
+        matching: find.byType(InkWell),
+      );
+      await tester.tap(sortDropdown.first);
+      await tester.pumpAndSettle();
+
+      // Select Price, low to high
+      await tester.tap(find.text('Price, low to high'));
+      await tester.pumpAndSettle();
+
+      // First product should be Waterproof Poncho (£1.99)
+      expect(find.text('Waterproof Poncho'), findsOneWidget);
+      expect(find.text('£1.99'), findsOneWidget);
+    });
+
+    testWidgets('should sort products by price high to low', (tester) async {
+      tester.view.physicalSize = const Size(1200, 2400);
+      tester.view.devicePixelRatio = 1.0;
+      await tester.pumpWidget(createTestWidget());
+      await tester.pumpAndSettle();
+
+      // Tap sort dropdown
+      final sortDropdown = find.ancestor(
+        of: find.text('Featured'),
+        matching: find.byType(InkWell),
+      );
+      await tester.tap(sortDropdown.first);
+      await tester.pumpAndSettle();
+
+      // Select Price, high to low
+      await tester.tap(find.text('Price, high to low'));
+      await tester.pumpAndSettle();
+
+      // First product should be Graduation 3/4 Zipped Sweatshirt (£45.00)
+      expect(find.text('Graduation 3/4 Zipped Sweatshirt'), findsOneWidget);
+      expect(find.text('£45.00'), findsOneWidget);
+    });
+
+    testWidgets('should reset to page 1 when filter changes', (tester) async {
+      tester.view.physicalSize = const Size(1200, 2400);
+      tester.view.devicePixelRatio = 1.0;
+      await tester.pumpWidget(createTestWidget());
+      await tester.pumpAndSettle();
+
+      // Navigate to page 2
+      await tester.drag(
+          find.byType(SingleChildScrollView), const Offset(0, -1000));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byIcon(Icons.arrow_forward));
+      await tester.pumpAndSettle();
+      expect(find.text('Page 2 of 2'), findsOneWidget);
+
+      // Scroll back up to filter dropdown
+      await tester.drag(
+          find.byType(SingleChildScrollView), const Offset(0, 1000));
+      await tester.pumpAndSettle();
+
+      // Change filter
+      final filterDropdown = find.ancestor(
+        of: find.text('All products'),
+        matching: find.byType(InkWell),
+      );
+      await tester.tap(filterDropdown.first);
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Merchandise'));
+      await tester.pumpAndSettle();
+
+      // Should be back on page 1
+      // With only 3 merchandise items, pagination should be hidden
+      expect(find.text('Page 1 of 1'), findsNothing);
+      expect(find.byIcon(Icons.arrow_forward), findsNothing);
+    });
+
+    testWidgets('should reset to page 1 when sort changes', (tester) async {
+      tester.view.physicalSize = const Size(1200, 2400);
+      tester.view.devicePixelRatio = 1.0;
+      await tester.pumpWidget(createTestWidget());
+      await tester.pumpAndSettle();
+
+      // Navigate to page 2
+      await tester.drag(
+          find.byType(SingleChildScrollView), const Offset(0, -1000));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byIcon(Icons.arrow_forward));
+      await tester.pumpAndSettle();
+      expect(find.text('Page 2 of 2'), findsOneWidget);
+
+      // Scroll back up to sort dropdown
+      await tester.drag(
+          find.byType(SingleChildScrollView), const Offset(0, 1000));
+      await tester.pumpAndSettle();
+
+      // Change sort
+      final sortDropdown = find.ancestor(
+        of: find.text('Featured'),
+        matching: find.byType(InkWell),
+      );
+      await tester.tap(sortDropdown.first);
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Price, low to high'));
+      await tester.pumpAndSettle();
+
+      // Should be back on page 1
+      expect(find.text('Page 1 of 2'), findsOneWidget);
+    });
+
+    testWidgets('should hide pagination when only one page', (tester) async {
+      tester.view.physicalSize = const Size(1200, 2400);
+      tester.view.devicePixelRatio = 1.0;
+      await tester.pumpWidget(createTestWidget());
+      await tester.pumpAndSettle();
+
+      // Filter to Merchandise (only 3 items)
+      final filterDropdown = find.ancestor(
+        of: find.text('All products'),
+        matching: find.byType(InkWell),
+      );
+      await tester.tap(filterDropdown.first);
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Merchandise'));
+      await tester.pumpAndSettle();
+
+      // Pagination should be hidden
+      await tester.drag(
+          find.byType(SingleChildScrollView), const Offset(0, -1000));
+      await tester.pumpAndSettle();
+      expect(find.byIcon(Icons.arrow_forward), findsNothing);
+      expect(find.byIcon(Icons.arrow_back), findsNothing);
+    });
+
+    testWidgets('should display correct product count after filtering',
+        (tester) async {
+      tester.view.physicalSize = const Size(1200, 2400);
+      tester.view.devicePixelRatio = 1.0;
+      await tester.pumpWidget(createTestWidget());
+      await tester.pumpAndSettle();
+
+      // Initially 17 products
+      expect(find.text('17 products'), findsOneWidget);
+
+      // Filter to Clothing
+      final filterDropdown = find.ancestor(
+        of: find.text('All products'),
+        matching: find.byType(InkWell),
+      );
+      await tester.tap(filterDropdown.first);
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Clothing').last);
+      await tester.pumpAndSettle();
+
+      // Should show 14 products
+      expect(find.text('14 products'), findsOneWidget);
+    });
+
+    testWidgets('should navigate to product page when product tapped',
+        (tester) async {
+      tester.view.physicalSize = const Size(1200, 2400);
+      tester.view.devicePixelRatio = 1.0;
+
+      final navigatorKey = GlobalKey<NavigatorState>();
+      await tester.pumpWidget(MaterialApp(
+        navigatorKey: navigatorKey,
+        home: const CollectionPage(),
+        routes: {
+          '/product': (context) => const Scaffold(body: Text('Product Page')),
+        },
+      ));
+      await tester.pumpAndSettle();
+
+      // Tap on first product
+      await tester.tap(find.text('Classic Hoodies'));
+      await tester.pumpAndSettle();
+
+      // Should navigate to product page
+      expect(find.text('Product Page'), findsOneWidget);
     });
   });
 }

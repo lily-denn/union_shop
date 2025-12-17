@@ -13,7 +13,6 @@ class _CollectionPageState extends State<CollectionPage> {
   String _filterBy = 'All products';
   String _sortBy = 'Featured';
   int _currentPage = 1;
-  final int _totalPages = 2;
   bool _filterMenuOpen = false;
   bool _sortMenuOpen = false;
 
@@ -36,7 +35,174 @@ class _CollectionPageState extends State<CollectionPage> {
     'Date, new to old',
   ];
 
-  int get _productsPerPage => _currentPage == 1 ? 9 : 8;
+  final List<Map<String, String>> _allProducts = [
+    {
+      'name': 'Classic Hoodies',
+      'price': '£25.00',
+      'category': 'Clothing',
+      'priceValue': '25.00',
+      'date': '2024-01-01'
+    },
+    {
+      'name': 'Classic Sweatshirts',
+      'price': '£23.00',
+      'category': 'Clothing',
+      'priceValue': '23.00',
+      'date': '2024-01-02'
+    },
+    {
+      'name': 'Classic T-Shirts',
+      'price': '£11.00',
+      'category': 'Clothing',
+      'priceValue': '11.00',
+      'date': '2024-01-03'
+    },
+    {
+      'name': 'Classic Sweatshirts – Neutral',
+      'price': '£10.99',
+      'category': 'Clothing',
+      'priceValue': '10.99',
+      'date': '2024-01-04'
+    },
+    {
+      'name': 'Graduation Hoodies',
+      'price': '£35.00',
+      'category': 'Clothing',
+      'priceValue': '35.00',
+      'date': '2024-01-05'
+    },
+    {
+      'name': 'Graduation 3/4 Zipped Sweatshirt',
+      'price': '£45.00',
+      'category': 'Clothing',
+      'priceValue': '45.00',
+      'date': '2024-01-06'
+    },
+    {
+      'name': 'Classic Cap',
+      'price': '£12.00',
+      'category': 'Merchandise',
+      'priceValue': '12.00',
+      'date': '2024-01-07'
+    },
+    {
+      'name': 'Classic Beanie Hat',
+      'price': '£12.00',
+      'category': 'Merchandise',
+      'priceValue': '12.00',
+      'date': '2024-01-08'
+    },
+    {
+      'name': 'Classic Rainbow Hoodies',
+      'price': '£12.99',
+      'category': 'Clothing',
+      'priceValue': '12.99',
+      'date': '2024-01-09'
+    },
+    {
+      'name': 'Heavyweight Shorts',
+      'price': '£12.99',
+      'category': 'Clothing',
+      'priceValue': '12.99',
+      'date': '2024-01-10'
+    },
+    {
+      'name': 'Signature Hoodie',
+      'price': '£32.99',
+      'category': 'Clothing',
+      'priceValue': '32.99',
+      'date': '2024-01-11'
+    },
+    {
+      'name': 'Essential T-Shirt',
+      'price': '£6.99',
+      'category': 'Clothing',
+      'priceValue': '6.99',
+      'date': '2024-01-12'
+    },
+    {
+      'name': 'Limited Edition Essential Zip Hoodies',
+      'price': '£14.99',
+      'category': 'Clothing',
+      'priceValue': '14.99',
+      'date': '2024-01-13'
+    },
+    {
+      'name': 'Waterproof Poncho',
+      'price': '£1.99',
+      'category': 'Clothing',
+      'priceValue': '1.99',
+      'date': '2024-01-14'
+    },
+    {
+      'name': 'Classic Hoodies – Burgundy',
+      'price': '£12.00',
+      'category': 'Clothing',
+      'priceValue': '12.00',
+      'date': '2024-01-15'
+    },
+    {
+      'name': 'Signature T-Shirt',
+      'price': '£14.99',
+      'category': 'Clothing',
+      'priceValue': '14.99',
+      'date': '2024-01-16'
+    },
+    {
+      'name': 'Limited Edition UoP Beanies',
+      'price': '£7.50',
+      'category': 'Merchandise',
+      'priceValue': '7.50',
+      'date': '2024-01-17'
+    },
+  ];
+
+  List<Map<String, String>> get _filteredAndSortedProducts {
+    List<Map<String, String>> filtered = List.from(_allProducts);
+
+    // Apply filter
+    if (_filterBy != 'All products') {
+      filtered = filtered
+          .where((product) => product['category'] == _filterBy)
+          .toList();
+    }
+
+    // Apply sort
+    switch (_sortBy) {
+      case 'Alphabetically, A–Z':
+        filtered.sort((a, b) => a['name']!.compareTo(b['name']!));
+        break;
+      case 'Alphabetically, Z–A':
+        filtered.sort((a, b) => b['name']!.compareTo(a['name']!));
+        break;
+      case 'Price, low to high':
+        filtered.sort((a, b) => double.parse(a['priceValue']!)
+            .compareTo(double.parse(b['priceValue']!)));
+        break;
+      case 'Price, high to low':
+        filtered.sort((a, b) => double.parse(b['priceValue']!)
+            .compareTo(double.parse(a['priceValue']!)));
+        break;
+      case 'Date, old to new':
+        filtered.sort((a, b) => a['date']!.compareTo(b['date']!));
+        break;
+      case 'Date, new to old':
+        filtered.sort((a, b) => b['date']!.compareTo(a['date']!));
+        break;
+      // 'Featured' and 'Best selling' keep original order
+    }
+
+    return filtered;
+  }
+
+  int get _totalProducts => _filteredAndSortedProducts.length;
+
+  int get _totalPages => (_totalProducts / 9).ceil();
+
+  int get _productsPerPage {
+    final remaining = _totalProducts - ((_currentPage - 1) * 9);
+    return remaining > 9 ? 9 : remaining;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -119,6 +285,7 @@ class _CollectionPageState extends State<CollectionPage> {
                                         setState(() {
                                           _sortBy = value!;
                                           _sortMenuOpen = false;
+                                          _currentPage = 1;
                                         });
                                       },
                                       onOpenChanged: (isOpen) {
@@ -142,6 +309,7 @@ class _CollectionPageState extends State<CollectionPage> {
                                       setState(() {
                                         _filterBy = value!;
                                         _filterMenuOpen = false;
+                                        _currentPage = 1;
                                       });
                                     },
                                     onOpenChanged: (isOpen) {
@@ -161,6 +329,7 @@ class _CollectionPageState extends State<CollectionPage> {
                                       setState(() {
                                         _sortBy = value!;
                                         _sortMenuOpen = false;
+                                        _currentPage = 1;
                                       });
                                     },
                                     onOpenChanged: (isOpen) {
@@ -171,7 +340,7 @@ class _CollectionPageState extends State<CollectionPage> {
                                   ),
                                   const Spacer(),
                                   Text(
-                                    '17 products',
+                                    '$_totalProducts products',
                                     style: TextStyle(
                                       fontSize: 14,
                                       color: Colors.grey[700],
@@ -194,7 +363,7 @@ class _CollectionPageState extends State<CollectionPage> {
                           child: Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
-                              '17 products',
+                              '$_totalProducts products',
                               style: TextStyle(
                                 fontSize: 14,
                                 color: Colors.grey[700],
@@ -205,172 +374,211 @@ class _CollectionPageState extends State<CollectionPage> {
                       const SizedBox(height: 32),
 
                       // Products Grid
-                      Center(
-                        child: ConstrainedBox(
-                          constraints: const BoxConstraints(maxWidth: 1200),
-                          child: LayoutBuilder(
-                            builder: (context, constraints) {
-                              final screenWidth =
-                                  MediaQuery.of(context).size.width;
-                              int crossAxisCount;
+                      if (_totalProducts == 0)
+                        Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(48.0),
+                            child: Text(
+                              'No products found matching your filters.',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.grey[600],
+                              ),
+                            ),
+                          ),
+                        )
+                      else
+                        Center(
+                          child: ConstrainedBox(
+                            constraints: const BoxConstraints(maxWidth: 1200),
+                            child: LayoutBuilder(
+                              builder: (context, constraints) {
+                                final screenWidth =
+                                    MediaQuery.of(context).size.width;
+                                int crossAxisCount;
 
-                              if (screenWidth < 600) {
-                                crossAxisCount = 2;
-                              } else if (screenWidth < 900) {
-                                crossAxisCount = 2;
-                              } else {
-                                crossAxisCount = 3;
-                              }
+                                if (screenWidth < 600) {
+                                  crossAxisCount = 2;
+                                } else if (screenWidth < 900) {
+                                  crossAxisCount = 2;
+                                } else {
+                                  crossAxisCount = 3;
+                                }
 
-                              return GridView.builder(
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: crossAxisCount,
-                                  crossAxisSpacing: screenWidth < 600 ? 4 : 24,
-                                  mainAxisSpacing: screenWidth < 600 ? 16 : 32,
-                                  childAspectRatio:
-                                      screenWidth < 600 ? 0.85 : 1.1,
-                                ),
-                                itemCount: _productsPerPage,
-                                itemBuilder: (context, index) {
-                                  return LayoutBuilder(
-                                    builder: (context, constraints) {
-                                      return Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Flexible(
-                                            flex: 7,
-                                            child: Container(
-                                              width: double.infinity,
-                                              decoration: BoxDecoration(
-                                                color: Colors.grey[300],
-                                              ),
-                                              child: Center(
-                                                child: Text(
-                                                  'Product ${(_currentPage - 1) * 9 + index + 1}',
-                                                  style: const TextStyle(
-                                                    fontSize: 16,
-                                                    color: Colors.grey,
+                                return GridView.builder(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  gridDelegate:
+                                      SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: crossAxisCount,
+                                    crossAxisSpacing:
+                                        screenWidth < 600 ? 4 : 24,
+                                    mainAxisSpacing:
+                                        screenWidth < 600 ? 16 : 32,
+                                    childAspectRatio:
+                                        screenWidth < 600 ? 0.85 : 1.1,
+                                  ),
+                                  itemCount: _productsPerPage,
+                                  itemBuilder: (context, index) {
+                                    final productIndex =
+                                        (_currentPage - 1) * 9 + index;
+                                    final product = _filteredAndSortedProducts[
+                                        productIndex];
+
+                                    return GestureDetector(
+                                      onTap: () {
+                                        Navigator.pushNamed(
+                                            context, '/product');
+                                      },
+                                      child: LayoutBuilder(
+                                        builder: (context, constraints) {
+                                          return Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Flexible(
+                                                flex: 7,
+                                                child: Container(
+                                                  width: double.infinity,
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.grey[300],
+                                                  ),
+                                                  child: Image.network(
+                                                    'https://upsu-store.myshopify.com/cdn/shop/files/0D5A5103_da3f11e8-86a2-4f35-a49d-8f41f99f9d02.jpg?v=1734103677',
+                                                    fit: BoxFit.cover,
+                                                    width: double.infinity,
+                                                    height: double.infinity,
+                                                    errorBuilder: (context,
+                                                        error, stackTrace) {
+                                                      return Center(
+                                                        child: Text(
+                                                          'Product ${productIndex + 1}',
+                                                          style:
+                                                              const TextStyle(
+                                                            fontSize: 16,
+                                                            color: Colors.grey,
+                                                          ),
+                                                        ),
+                                                      );
+                                                    },
                                                   ),
                                                 ),
                                               ),
-                                            ),
-                                          ),
-                                          const SizedBox(height: 12),
-                                          Flexible(
-                                            flex: 2,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                Text(
-                                                  'Placeholder Product Title',
-                                                  style: TextStyle(
-                                                    fontSize: 14,
-                                                    color: Colors.grey[800],
-                                                  ),
-                                                  maxLines: 2,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
+                                              const SizedBox(height: 12),
+                                              Flexible(
+                                                flex: 2,
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  children: [
+                                                    Text(
+                                                      product['name']!,
+                                                      style: TextStyle(
+                                                        fontSize: 14,
+                                                        color: Colors.grey[800],
+                                                      ),
+                                                      maxLines: 2,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
+                                                    const SizedBox(height: 4),
+                                                    Text(
+                                                      product['price']!,
+                                                      style: TextStyle(
+                                                        fontSize: 14,
+                                                        color: Colors.grey[700],
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
-                                                const SizedBox(height: 4),
-                                                Text(
-                                                  '£20.00',
-                                                  style: TextStyle(
-                                                    fontSize: 14,
-                                                    color: Colors.grey[700],
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
-                                },
-                              );
-                            },
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      ),
+                                    );
+                                  },
+                                );
+                              },
+                            ),
                           ),
                         ),
-                      ),
                       const SizedBox(height: 48),
 
                       // Page Navigation
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          // Previous button
-                          InkWell(
-                            onTap: _currentPage > 1
-                                ? () {
-                                    setState(() {
-                                      _currentPage--;
-                                    });
-                                  }
-                                : null,
-                            child: Container(
-                              width: 36,
-                              height: 36,
-                              decoration: BoxDecoration(
-                                border: Border.all(
+                      if (_totalPages > 1)
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            // Previous button
+                            InkWell(
+                              onTap: _currentPage > 1
+                                  ? () {
+                                      setState(() {
+                                        _currentPage--;
+                                      });
+                                    }
+                                  : null,
+                              child: Container(
+                                width: 36,
+                                height: 36,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: _currentPage > 1
+                                        ? Colors.black
+                                        : Colors.grey[400]!,
+                                  ),
+                                ),
+                                child: Icon(
+                                  Icons.arrow_back,
+                                  size: 18,
                                   color: _currentPage > 1
                                       ? Colors.black
-                                      : Colors.grey[400]!,
+                                      : Colors.grey[400],
                                 ),
                               ),
-                              child: Icon(
-                                Icons.arrow_back,
-                                size: 18,
-                                color: _currentPage > 1
-                                    ? Colors.black
-                                    : Colors.grey[400],
+                            ),
+                            const SizedBox(width: 16),
+                            Text(
+                              'Page $_currentPage of $_totalPages',
+                              style: const TextStyle(
+                                fontSize: 14,
                               ),
                             ),
-                          ),
-                          const SizedBox(width: 16),
-                          Text(
-                            'Page $_currentPage of $_totalPages',
-                            style: const TextStyle(
-                              fontSize: 14,
-                            ),
-                          ),
-                          const SizedBox(width: 16),
-                          // Next button
-                          InkWell(
-                            onTap: _currentPage < _totalPages
-                                ? () {
-                                    setState(() {
-                                      _currentPage++;
-                                    });
-                                  }
-                                : null,
-                            child: Container(
-                              width: 36,
-                              height: 36,
-                              decoration: BoxDecoration(
-                                border: Border.all(
+                            const SizedBox(width: 16),
+                            // Next button
+                            InkWell(
+                              onTap: _currentPage < _totalPages
+                                  ? () {
+                                      setState(() {
+                                        _currentPage++;
+                                      });
+                                    }
+                                  : null,
+                              child: Container(
+                                width: 36,
+                                height: 36,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: _currentPage < _totalPages
+                                        ? Colors.black
+                                        : Colors.grey[400]!,
+                                  ),
+                                ),
+                                child: Icon(
+                                  Icons.arrow_forward,
+                                  size: 18,
                                   color: _currentPage < _totalPages
                                       ? Colors.black
-                                      : Colors.grey[400]!,
+                                      : Colors.grey[400],
                                 ),
                               ),
-                              child: Icon(
-                                Icons.arrow_forward,
-                                size: 18,
-                                color: _currentPage < _totalPages
-                                    ? Colors.black
-                                    : Colors.grey[400],
-                              ),
                             ),
-                          ),
-                        ],
-                      ),
+                          ],
+                        ),
                     ],
                   ),
                 );
