@@ -14,6 +14,7 @@ class _ProductPageState extends State<ProductPage> {
   String _selectedSize = 'M';
   int _quantity = 1;
   int _selectedImageIndex = 0;
+  late TextEditingController _quantityController;
 
   final List<String> _colors = ['Baby Pink', 'Stone Blue', 'Black', 'Grey'];
   final List<String> _sizes = ['S', 'M', 'L'];
@@ -23,6 +24,25 @@ class _ProductPageState extends State<ProductPage> {
     'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
     'https://shop.upsu.net/cdn/shop/files/PortsmouthCityMagnet1_1024x1024@2x.jpg?v=1752230282',
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _quantityController = TextEditingController(text: _quantity.toString());
+  }
+
+  @override
+  void dispose() {
+    _quantityController.dispose();
+    super.dispose();
+  }
+
+  void _updateQuantity(int newQuantity) {
+    setState(() {
+      _quantity = newQuantity;
+      _quantityController.text = _quantity.toString();
+    });
+  }
 
   void navigateToHome(BuildContext context) {
     Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
@@ -331,7 +351,7 @@ class _ProductPageState extends State<ProductPage> {
                         ),
                         const SizedBox(height: 8),
                         TextFormField(
-                          initialValue: _quantity.toString(),
+                          controller: _quantityController,
                           keyboardType: TextInputType.number,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(
@@ -345,18 +365,16 @@ class _ProductPageState extends State<ProductPage> {
                               children: [
                                 InkWell(
                                   onTap: () {
-                                    setState(() {
-                                      _quantity++;
-                                    });
+                                    _updateQuantity(_quantity + 1);
                                   },
                                   child:
                                       const Icon(Icons.arrow_drop_up, size: 20),
                                 ),
                                 InkWell(
                                   onTap: () {
-                                    setState(() {
-                                      if (_quantity > 1) _quantity--;
-                                    });
+                                    if (_quantity > 1) {
+                                      _updateQuantity(_quantity - 1);
+                                    }
                                   },
                                   child: const Icon(Icons.arrow_drop_down,
                                       size: 20),
@@ -367,9 +385,7 @@ class _ProductPageState extends State<ProductPage> {
                           onChanged: (value) {
                             final newQuantity = int.tryParse(value);
                             if (newQuantity != null && newQuantity > 0) {
-                              setState(() {
-                                _quantity = newQuantity;
-                              });
+                              _updateQuantity(newQuantity);
                             }
                           },
                         ),
@@ -483,7 +499,7 @@ class _ProductPageState extends State<ProductPage> {
                       ),
                       const SizedBox(height: 8),
                       TextFormField(
-                        initialValue: _quantity.toString(),
+                        controller: _quantityController,
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
@@ -497,18 +513,16 @@ class _ProductPageState extends State<ProductPage> {
                             children: [
                               InkWell(
                                 onTap: () {
-                                  setState(() {
-                                    _quantity++;
-                                  });
+                                  _updateQuantity(_quantity + 1);
                                 },
                                 child:
                                     const Icon(Icons.arrow_drop_up, size: 20),
                               ),
                               InkWell(
                                 onTap: () {
-                                  setState(() {
-                                    if (_quantity > 1) _quantity--;
-                                  });
+                                  if (_quantity > 1) {
+                                    _updateQuantity(_quantity - 1);
+                                  }
                                 },
                                 child:
                                     const Icon(Icons.arrow_drop_down, size: 20),
@@ -519,9 +533,7 @@ class _ProductPageState extends State<ProductPage> {
                         onChanged: (value) {
                           final newQuantity = int.tryParse(value);
                           if (newQuantity != null && newQuantity > 0) {
-                            setState(() {
-                              _quantity = newQuantity;
-                            });
+                            _updateQuantity(newQuantity);
                           }
                         },
                       ),
@@ -632,7 +644,7 @@ class _ProductPageState extends State<ProductPage> {
                             ),
                             const SizedBox(height: 8),
                             TextFormField(
-                              initialValue: _quantity.toString(),
+                              controller: _quantityController,
                               keyboardType: TextInputType.number,
                               decoration: InputDecoration(
                                 border: OutlineInputBorder(
@@ -647,18 +659,16 @@ class _ProductPageState extends State<ProductPage> {
                                   children: [
                                     InkWell(
                                       onTap: () {
-                                        setState(() {
-                                          _quantity++;
-                                        });
+                                        _updateQuantity(_quantity + 1);
                                       },
                                       child: const Icon(Icons.arrow_drop_up,
                                           size: 20),
                                     ),
                                     InkWell(
                                       onTap: () {
-                                        setState(() {
-                                          if (_quantity > 1) _quantity--;
-                                        });
+                                        if (_quantity > 1) {
+                                          _updateQuantity(_quantity - 1);
+                                        }
                                       },
                                       child: const Icon(Icons.arrow_drop_down,
                                           size: 20),
@@ -669,9 +679,7 @@ class _ProductPageState extends State<ProductPage> {
                               onChanged: (value) {
                                 final newQuantity = int.tryParse(value);
                                 if (newQuantity != null && newQuantity > 0) {
-                                  setState(() {
-                                    _quantity = newQuantity;
-                                  });
+                                  _updateQuantity(newQuantity);
                                 }
                               },
                             ),
