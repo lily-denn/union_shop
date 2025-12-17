@@ -15,6 +15,7 @@ class _CartPageState extends State<CartPage> {
   final CartService _cartService = CartService();
   final Map<String, bool> _editingStates = {};
   final Map<String, TextEditingController> _quantityControllers = {};
+  bool _showCheckoutConfirmation = false;
 
   @override
   void initState() {
@@ -87,6 +88,32 @@ class _CartPageState extends State<CartPage> {
     });
   }
 
+  void _handleCheckout() {
+    if (_cartService.items.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Your cart is empty'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
+
+    setState(() {
+      _showCheckoutConfirmation = true;
+    });
+    _cartService.clearCart();
+
+    // Hide confirmation after 5 seconds
+    Future.delayed(const Duration(seconds: 5), () {
+      if (mounted) {
+        setState(() {
+          _showCheckoutConfirmation = false;
+        });
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final isDesktop = MediaQuery.of(context).size.width > 900;
@@ -111,6 +138,44 @@ class _CartPageState extends State<CartPage> {
                 ),
               ),
             ),
+            if (_showCheckoutConfirmation)
+              Container(
+                width: double.infinity,
+                padding:
+                    const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
+                color: const Color(0xFF4d2963),
+                child: Center(
+                  child: Column(
+                    children: [
+                      const Icon(
+                        Icons.check_circle_outline,
+                        color: Colors.white,
+                        size: 60,
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        'Thank you for your purchase!',
+                        style: TextStyle(
+                          fontSize:
+                              MediaQuery.of(context).size.width < 600 ? 24 : 32,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 8),
+                      const Text(
+                        'Your order has been confirmed',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.white70,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             const AppFooter(),
           ],
         ),
@@ -315,10 +380,7 @@ class _CartPageState extends State<CartPage> {
                       const SizedBox(width: 12),
                       // Checkout Button
                       ElevatedButton(
-                        onPressed: () {
-                          Navigator.pushNamedAndRemoveUntil(
-                              context, '/', (route) => false);
-                        },
+                        onPressed: _handleCheckout,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF4d2963),
                           foregroundColor: Colors.white,
@@ -636,9 +698,7 @@ class _CartPageState extends State<CartPage> {
         SizedBox(
           width: double.infinity,
           child: ElevatedButton(
-            onPressed: () {
-              Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
-            },
+            onPressed: _handleCheckout,
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFF4d2963),
               foregroundColor: Colors.white,

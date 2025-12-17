@@ -77,9 +77,6 @@ void main() {
         matching: find.byType(ElevatedButton),
       );
 
-      // Get the button widget
-      final button = tester.widget<ElevatedButton>(continueButton);
-
       // Button should be disabled (onPressed is null or has disabled styling)
       // We can check by tapping and verifying no navigation occurs
       await tester.tap(continueButton);
@@ -129,15 +126,10 @@ void main() {
 
     testWidgets('should navigate to home on continue with valid email',
         (tester) async {
-      bool navigationCalled = false;
-
       await tester.pumpWidget(MaterialApp(
         initialRoute: '/signin',
         routes: {
-          '/': (context) {
-            navigationCalled = true;
-            return const Scaffold(body: Text('Home Page'));
-          },
+          '/': (context) => const Scaffold(body: Text('Home Page')),
           '/signin': (context) => const SignInPage(),
         },
       ));

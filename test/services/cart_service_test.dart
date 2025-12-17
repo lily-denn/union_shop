@@ -303,7 +303,7 @@ void main() {
       expect(cartService.subtotal, closeTo(34.97, 0.01));
     });
 
-    test('should get item by id, color, size, and customText', () {
+    test('should get item by index', () {
       cartService.addItem(
         id: 'test_001',
         name: 'Test Product',
@@ -315,6 +315,7 @@ void main() {
       );
 
       final item = cartService.getItem(
+        0,
         id: 'test_001',
         color: 'Red',
         size: 'M',
@@ -325,7 +326,7 @@ void main() {
       expect(item?.name, 'Test Product');
     });
 
-    test('should return null when getting non-existent item', () {
+    test('should return null when getting item at invalid index', () {
       cartService.addItem(
         id: 'test_001',
         name: 'Test Product',
@@ -335,8 +336,11 @@ void main() {
       );
 
       final item = cartService.getItem(
+        5,
         id: 'test_001',
-        color: 'Blue',
+        color: 'Red',
+        size: '',
+        customText: '',
       );
 
       expect(item, isNull);

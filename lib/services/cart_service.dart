@@ -76,7 +76,11 @@ class CartService extends ChangeNotifier {
     notifyListeners();
   }
 
-  CartItem? getItem(int index) {
+  CartItem? getItem(int index,
+      {required String customText,
+      required String size,
+      required String color,
+      required String id}) {
     if (index >= 0 && index < _items.length) {
       return _items[index];
     }

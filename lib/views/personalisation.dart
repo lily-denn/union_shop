@@ -30,8 +30,8 @@ class _ProductPageState extends State<ProductPage> {
   ];
 
   final List<String> _productImages = [
-    'https://i.imgur.com/7yZ5Z9M.jpeg',
-    'https://i.imgur.com/8Z5Z9M.jpeg',
+    'lib/models/images/personalisationhoodie.png',
+    'lib/models/images/personalisationhoodiecloseup.png',
   ];
 
   int get _numberOfLines {
