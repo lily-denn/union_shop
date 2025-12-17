@@ -12,6 +12,7 @@ class AppNavbar extends StatefulWidget {
 class _AppNavbarState extends State<AppNavbar> {
   final CartService _cartService = CartService();
   bool _mobileMenuOpen = false;
+  bool _printShackHovered = false;
   bool _showPrintShackSubmenu = false;
 
   @override
@@ -199,193 +200,169 @@ class _AppNavbarState extends State<AppNavbar> {
                   });
                 }
 
-                // Close mobile menu when screen becomes desktop
-                if (screenWidth >= 900 && _mobileMenuOpen) {
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    if (mounted) {
-                      setState(() {
-                        _mobileMenuOpen = false;
-                      });
-                    }
-                  });
-                }
-
                 return Container(
                   height: isSmallScreen ? 60 : 80,
                   padding: EdgeInsets.symmetric(
                       horizontal: screenWidth < 650 ? 8 : 24),
-                  child: Stack(
-                    clipBehavior: Clip.none,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Flexible(
-                            flex: 0,
-                            child: GestureDetector(
-                              onTap: () {
-                                navigateToHome(context);
-                              },
-                              child: ConstrainedBox(
-                                constraints: BoxConstraints(
-                                  maxWidth: screenWidth * 0.25,
-                                ),
-                                child: Image.network(
-                                  'https://shop.upsu.net/cdn/shop/files/upsu_300x300.png?v=1614735854',
+                      Flexible(
+                        flex: 0,
+                        child: GestureDetector(
+                          onTap: () {
+                            navigateToHome(context);
+                          },
+                          child: ConstrainedBox(
+                            constraints: BoxConstraints(
+                              maxWidth: screenWidth * 0.25,
+                            ),
+                            child: Image.network(
+                              'https://shop.upsu.net/cdn/shop/files/upsu_300x300.png?v=1614735854',
+                              height: logoHeight,
+                              fit: BoxFit.contain,
+                              errorBuilder: (context, error, stackTrace) {
+                                return Container(
+                                  color: Colors.grey[300],
+                                  width: logoHeight,
                                   height: logoHeight,
-                                  fit: BoxFit.contain,
-                                  errorBuilder: (context, error, stackTrace) {
-                                    return Container(
-                                      color: Colors.grey[300],
-                                      width: logoHeight,
-                                      height: logoHeight,
-                                      child: const Center(
-                                        child: Icon(Icons.image_not_supported,
-                                            color: Colors.grey),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ),
+                                  child: const Center(
+                                    child: Icon(Icons.image_not_supported,
+                                        color: Colors.grey),
+                                  ),
+                                );
+                              },
                             ),
                           ),
-                          if (screenWidth >= 900) ...[
-                            const SizedBox(width: 16),
-                            Expanded(
-                              child: Wrap(
-                                spacing: 8,
-                                runSpacing: 8,
-                                alignment: WrapAlignment.center,
-                                crossAxisAlignment: WrapCrossAlignment.center,
-                                children: [
-                                  _buildHoverButton(
-                                    text: 'Home',
-                                    onPressed: () => navigateToHome(context),
-                                  ),
-                                  _buildHoverButton(
-                                    text: 'Shop',
-                                    onPressed: () =>
-                                        navigateToCollections(context),
-                                  ),
-                                  // Print Shack with submenu
-                                  StatefulBuilder(
-                                    builder: (context, setLocalState) {
-                                      bool isHovered = false;
-                                      return Stack(
-                                        clipBehavior: Clip.none,
-                                        children: [
-                                          MouseRegion(
-                                            onEnter: (_) => setLocalState(
-                                                () => isHovered = true),
-                                            onExit: (_) => setLocalState(
-                                                () => isHovered = false),
-                                            child: TextButton(
-                                              onPressed: () {
-                                                setState(() {
-                                                  _showPrintShackSubmenu =
-                                                      !_showPrintShackSubmenu;
-                                                });
-                                              },
-                                              style: TextButton.styleFrom(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 8,
-                                                        vertical: 0),
-                                                foregroundColor: Colors.black,
-                                                overlayColor:
-                                                    Colors.transparent,
-                                              ),
-                                              child: Row(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  Text(
-                                                    'The Print Shack',
-                                                    style: TextStyle(
-                                                      fontSize: 14,
-                                                      decoration: isHovered
-                                                          ? TextDecoration
-                                                              .underline
-                                                          : TextDecoration.none,
-                                                    ),
-                                                  ),
-                                                  const SizedBox(width: 4),
-                                                  const Icon(
-                                                      Icons.arrow_drop_down,
-                                                      size: 18,
-                                                      color: Colors.black),
-                                                ],
-                                              ),
-                                            ),
+                        ),
+                      ),
+                      if (screenWidth >= 900) ...[
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: Wrap(
+                            spacing: 8,
+                            runSpacing: 8,
+                            alignment: WrapAlignment.center,
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            children: [
+                              _buildHoverButton(
+                                text: 'Home',
+                                onPressed: () => navigateToHome(context),
+                              ),
+                              _buildHoverButton(
+                                text: 'Shop',
+                                onPressed: () => navigateToCollections(context),
+                              ),
+                              // Print Shack with submenu
+                              StatefulBuilder(
+                                builder: (context, setLocalState) {
+                                  bool isHovered = false;
+                                  return Stack(
+                                    clipBehavior: Clip.none,
+                                    children: [
+                                      MouseRegion(
+                                        onEnter: (_) => setLocalState(
+                                            () => isHovered = true),
+                                        onExit: (_) => setLocalState(
+                                            () => isHovered = false),
+                                        child: TextButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              _showPrintShackSubmenu =
+                                                  !_showPrintShackSubmenu;
+                                            });
+                                          },
+                                          style: TextButton.styleFrom(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 8, vertical: 0),
+                                            foregroundColor: Colors.black,
+                                            overlayColor: Colors.transparent,
                                           ),
-                                          if (_showPrintShackSubmenu)
-                                            Positioned(
-                                              top: 38,
-                                              left: 8,
-                                              child: Material(
-                                                elevation: 16,
-                                                color: Colors.white,
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Text(
+                                                'The Print Shack',
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                  decoration: isHovered
+                                                      ? TextDecoration.underline
+                                                      : TextDecoration.none,
+                                                ),
+                                              ),
+                                              const SizedBox(width: 4),
+                                              const Icon(Icons.arrow_drop_down,
+                                                  size: 18,
+                                                  color: Colors.black),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      if (_showPrintShackSubmenu)
+                                        Positioned(
+                                          top: 38,
+                                          left: 8,
+                                          child: Material(
+                                            elevation: 16,
+                                            color: Colors.white,
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                    color: Colors.grey[300]!),
                                                 borderRadius:
                                                     BorderRadius.circular(4),
-                                                child: Container(
-                                                  decoration: BoxDecoration(
-                                                    border: Border.all(
-                                                        color:
-                                                            Colors.grey[300]!),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            4),
-                                                  ),
-                                                  child: IntrinsicWidth(
-                                                    child: Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .stretch,
-                                                      mainAxisSize:
-                                                          MainAxisSize.min,
-                                                      children: [
-                                                        _buildSubmenuItem(
-                                                            'About',
-                                                            () =>
-                                                                navigateToPrintShackAbout(
-                                                                    context)),
-                                                        _buildSubmenuItem(
-                                                            'Personalisation',
-                                                            () =>
-                                                                navigateToPersonalisation(
-                                                                    context)),
-                                                      ],
-                                                    ),
-                                                  ),
+                                              ),
+                                              child: IntrinsicWidth(
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment
+                                                          .stretch,
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  children: [
+                                                    _buildSubmenuItem(
+                                                        'About',
+                                                        () =>
+                                                            navigateToPrintShackAbout(
+                                                                context)),
+                                                    _buildSubmenuItem(
+                                                        'Personalisation',
+                                                        () =>
+                                                            navigateToPersonalisation(
+                                                                context)),
+                                                  ],
                                                 ),
                                               ),
                                             ),
-                                        ],
-                                      );
-                                    },
-                                  ),
-                                  _buildHoverButton(
-                                    text: 'SALE!',
-                                    onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              const CollectionPage(),
+                                          ),
                                         ),
-                                      );
-                                    },
-                                  ),
-                                  _buildHoverButton(
-                                    text: 'UPSU.net',
-                                    onPressed: () => navigateToHome(context),
-                                  ),
-                                ],
+                                    ],
+                                  );
+                                },
                               ),
-                            ),
-                          ],
-                        ],
-                      ),
-                      if (screenWidth < 900) const Spacer(),
+                              _buildHoverButton(
+                                text: 'SALE!',
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const CollectionPage(),
+                                    ),
+                                  );
+                                },
+                              ),
+                              _buildHoverButton(
+                                text: 'UPSU.net',
+                                onPressed: () => navigateToHome(context),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ] else
+                        const Spacer(),
                       Flexible(
                         flex: 0,
                         child: Row(
