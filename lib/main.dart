@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:union_shop/views/product_page.dart';
+import 'package:union_shop/views/product_page.dart' as product_page;
 import 'package:union_shop/views/about_page.dart';
 import 'package:union_shop/views/home_page.dart';
 import 'package:union_shop/views/print_shack_about.dart';
 import 'package:union_shop/views/collections_page.dart';
 import 'package:union_shop/views/sign_in.dart';
 import 'package:union_shop/views/cart_page.dart';
+import 'package:union_shop/views/personalisation.dart';
 
 void main() {
   runApp(const UnionShopApp());
@@ -28,9 +29,11 @@ class UnionShopApp extends StatelessWidget {
       // When navigating to '/product', build and return the ProductPage
       // In your browser, try this link: http://localhost:49856/#/product
       routes: {
-        '/product': (context) => const ProductPage(),
+        '/product': (context) => const product_page.ProductPage(),
         '/about': (context) => const AboutPage(),
         '/print_shack': (context) => const PrintShackPage(),
+        '/print_shack_about': (context) => const PrintShackPage(),
+        '/personalisation': (context) => const product_page.ProductPage(),
         '/collections': (context) => const CollectionsPage(),
         '/sign_in': (context) => const SignInPage(),
         '/cart': (context) => const CartPage(),
