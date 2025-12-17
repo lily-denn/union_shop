@@ -24,6 +24,10 @@ class AppNavbar extends StatelessWidget {
     Navigator.pushNamed(context, '/sign_in');
   }
 
+  void navigateToCart(BuildContext context) {
+    Navigator.pushNamed(context, '/cart');
+  }
+
   void placeholderCallbackForButtons() {
     // This is the event handler for buttons that don't work yet
   }
@@ -232,7 +236,9 @@ class AppNavbar extends StatelessWidget {
                               minWidth: screenWidth < 900 ? 36.0 : 32.0,
                               minHeight: screenWidth < 900 ? 36.0 : 32.0,
                             ),
-                            onPressed: placeholderCallbackForButtons,
+                            onPressed: () {
+                              navigateToCart(context);
+                            },
                           ),
                           if (screenWidth < 900)
                             PopupMenuButton<String>(
