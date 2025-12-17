@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:union_shop/widgets/app_footer.dart';
 import 'package:union_shop/widgets/app_navbar.dart';
 import 'package:union_shop/views/collection_page.dart';
-import 'package:union_shop/views/print_shack_personalisation.dart';
+import 'package:union_shop/views/personalisation.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});

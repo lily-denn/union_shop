@@ -1,6 +1,8 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:union_shop/widgets/app_navbar.dart';
 import 'package:union_shop/widgets/app_footer.dart';
+import 'package:union_shop/views/personalisation.dart';
 
 class AboutPage extends StatelessWidget {
   const AboutPage({super.key});
@@ -53,13 +55,38 @@ class AboutPage extends StatelessWidget {
                             textAlign: TextAlign.left,
                           ),
                           const SizedBox(height: 16),
-                          const Text(
-                            'We\'re dedicated to giving you the very best University branded products, with a range of clothing and merchandise available to shop all year round! We even offer an exclusive personalisation service!',
-                            style: TextStyle(
+                          RichText(
+                            textAlign: TextAlign.left,
+                            text: TextSpan(
+                              style: const TextStyle(
                                 fontSize: 16,
                                 height: 1.5,
-                                color: Color(0xFF424242)),
-                            textAlign: TextAlign.left,
+                                color: Color(0xFF424242),
+                              ),
+                              children: [
+                                const TextSpan(
+                                  text:
+                                      'We\'re dedicated to giving you the very best University branded products, with a range of clothing and merchandise available to shop all year round! We even offer an exclusive ',
+                                ),
+                                TextSpan(
+                                  text: 'personalisation service',
+                                  style: const TextStyle(
+                                    decoration: TextDecoration.underline,
+                                  ),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              const ProductPage(),
+                                        ),
+                                      );
+                                    },
+                                ),
+                                const TextSpan(text: '!'),
+                              ],
+                            ),
                           ),
                           const SizedBox(height: 16),
                           const Text(
