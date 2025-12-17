@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:union_shop/widgets/app_navbar.dart';
 import 'package:union_shop/widgets/app_footer.dart';
+import 'package:union_shop/services/cart_service.dart';
 
 class ProductPage extends StatefulWidget {
   const ProductPage({super.key});
@@ -10,6 +11,7 @@ class ProductPage extends StatefulWidget {
 }
 
 class _ProductPageState extends State<ProductPage> {
+  final CartService _cartService = CartService();
   String _selectedOption = 'One Line of Text';
   int _quantity = 1;
   int _selectedImageIndex = 0;
@@ -443,7 +445,36 @@ class _ProductPageState extends State<ProductPage> {
         SizedBox(
           width: double.infinity,
           child: OutlinedButton(
-            onPressed: () {},
+            onPressed: () {
+              // Build custom text from controllers
+              String customText = _line1Controller.text;
+              if (_numberOfLines >= 2 && _line2Controller.text.isNotEmpty) {
+                customText += '\n${_line2Controller.text}';
+              }
+              if (_numberOfLines >= 3 && _line3Controller.text.isNotEmpty) {
+                customText += '\n${_line3Controller.text}';
+              }
+              if (_numberOfLines >= 4 && _line4Controller.text.isNotEmpty) {
+                customText += '\n${_line4Controller.text}';
+              }
+
+              _cartService.addItem(
+                id: 'print_custom',
+                name: 'Custom Print - $_selectedOption',
+                price: _basePrice,
+                quantity: _quantity,
+                customText: customText,
+                imageUrl: _productImages[0],
+              );
+
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Added $_quantity custom print(s) to cart'),
+                  duration: const Duration(seconds: 2),
+                  backgroundColor: const Color(0xFF4d2963),
+                ),
+              );
+            },
             style: OutlinedButton.styleFrom(
               padding: const EdgeInsets.symmetric(vertical: 16),
               side: const BorderSide(color: Color(0xFF4d2963), width: 2),

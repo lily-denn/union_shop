@@ -1,8 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:union_shop/views/salecollection_page.dart';
+import 'package:union_shop/services/cart_service.dart';
 
-class AppNavbar extends StatelessWidget {
+class AppNavbar extends StatefulWidget {
   const AppNavbar({super.key});
+
+  @override
+  State<AppNavbar> createState() => _AppNavbarState();
+}
+
+class _AppNavbarState extends State<AppNavbar> {
+  final CartService _cartService = CartService();
+
+  @override
+  void initState() {
+    super.initState();
+    _cartService.addListener(_onCartChanged);
+  }
+
+  @override
+  void dispose() {
+    _cartService.removeListener(_onCartChanged);
+    super.dispose();
+  }
+
+  void _onCartChanged() {
+    setState(() {});
+  }
 
   void navigateToHome(BuildContext context) {
     Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
@@ -225,20 +249,33 @@ class AppNavbar extends StatelessWidget {
                               navigateToSignIn(context);
                             },
                           ),
-                          IconButton(
-                            icon: Icon(
-                              Icons.shopping_bag_outlined,
-                              size: screenWidth < 900 ? 22.0 : 18.0,
-                              color: Colors.grey,
+                          Badge(
+                            isLabelVisible: _cartService.itemCount > 0,
+                            label: Text(
+                              _cartService.itemCount.toString(),
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                            padding: EdgeInsets.all(screenWidth < 900 ? 2 : 8),
-                            constraints: BoxConstraints(
-                              minWidth: screenWidth < 900 ? 36.0 : 32.0,
-                              minHeight: screenWidth < 900 ? 36.0 : 32.0,
+                            backgroundColor: Colors.purple,
+                            child: IconButton(
+                              icon: Icon(
+                                Icons.shopping_bag_outlined,
+                                size: screenWidth < 900 ? 22.0 : 18.0,
+                                color: Colors.grey,
+                              ),
+                              padding:
+                                  EdgeInsets.all(screenWidth < 900 ? 2 : 8),
+                              constraints: BoxConstraints(
+                                minWidth: screenWidth < 900 ? 36.0 : 32.0,
+                                minHeight: screenWidth < 900 ? 36.0 : 32.0,
+                              ),
+                              onPressed: () {
+                                navigateToCart(context);
+                              },
                             ),
-                            onPressed: () {
-                              navigateToCart(context);
-                            },
                           ),
                           if (screenWidth < 900)
                             PopupMenuButton<String>(

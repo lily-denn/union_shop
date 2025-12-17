@@ -29,9 +29,12 @@ void main() {
       await tester.pumpWidget(createTestWidget());
       await tester.pumpAndSettle();
 
+      // Text is in RichText widget, use byWidgetPredicate
       expect(
-        find.textContaining(
-            'We\'re dedicated to giving you the very best University branded products'),
+        find.byWidgetPredicate((widget) =>
+            widget is RichText &&
+            widget.text.toPlainText().contains(
+                'We\'re dedicated to giving you the very best University branded products')),
         findsOneWidget,
       );
     });

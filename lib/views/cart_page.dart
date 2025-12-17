@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:union_shop/widgets/app_navbar.dart';
 import 'package:union_shop/widgets/app_footer.dart';
+import 'package:union_shop/services/cart_service.dart';
+import 'package:union_shop/models/cart_model.dart' as model;
 
 class CartPage extends StatefulWidget {
   const CartPage({super.key});
@@ -10,84 +12,78 @@ class CartPage extends StatefulWidget {
 }
 
 class _CartPageState extends State<CartPage> {
-  final List<CartItem> _cartItems = [
-    CartItem(
-      id: '1',
-      name: 'Limited Edition Essential Zip Hoodie',
-      price: 14.99,
-      quantity: 1,
-      color: 'Baby Pink',
-      size: 'M',
-    ),
-    CartItem(
-      id: '2',
-      name: 'Classic T-Shirt',
-      price: 9.99,
-      quantity: 2,
-      color: 'Black',
-      size: 'L',
-    ),
-  ];
-
+  final CartService _cartService = CartService();
   final Map<String, bool> _editingStates = {};
   final Map<String, TextEditingController> _quantityControllers = {};
 
   @override
   void initState() {
     super.initState();
-    for (var item in _cartItems) {
-      _editingStates[item.id] = false;
-      _quantityControllers[item.id] =
-          TextEditingController(text: item.quantity.toString());
-    }
+    _cartService.addListener(_onCartChanged);
+    _initializeControllers();
   }
 
   @override
   void dispose() {
+    _cartService.removeListener(_onCartChanged);
     for (var controller in _quantityControllers.values) {
       controller.dispose();
     }
     super.dispose();
   }
 
-  double get subtotal {
-    return _cartItems.fold(
-        0, (sum, item) => sum + (item.price * item.quantity));
-  }
-
-  void _removeItem(String id) {
+  void _onCartChanged() {
     setState(() {
-      _cartItems.removeWhere((item) => item.id == id);
-      _editingStates.remove(id);
-      _quantityControllers[id]?.dispose();
-      _quantityControllers.remove(id);
+      _initializeControllers();
     });
   }
 
-  void _updateQuantity(String id, int newQuantity) {
-    if (newQuantity > 0) {
-      setState(() {
-        final item = _cartItems.firstWhere((item) => item.id == id);
-        item.quantity = newQuantity;
-        _quantityControllers[id]?.text = newQuantity.toString();
-      });
+  void _initializeControllers() {
+    for (var item in _cartService.items) {
+      final key = '${item.id}_${item.color}_${item.size}_${item.customText}';
+      if (!_editingStates.containsKey(key)) {
+        _editingStates[key] = false;
+      }
+      if (!_quantityControllers.containsKey(key)) {
+        _quantityControllers[key] =
+            TextEditingController(text: item.quantity.toString());
+      } else {
+        _quantityControllers[key]?.text = item.quantity.toString();
+      }
     }
   }
 
-  void _handleQuantityChange(String id, String value) {
+  double get subtotal => _cartService.subtotal;
+
+  void _removeItem(model.CartItem item) {
+    _cartService.removeItem(item);
+    final key = '${item.id}_${item.color}_${item.size}_${item.customText}';
+    _editingStates.remove(key);
+    _quantityControllers[key]?.dispose();
+    _quantityControllers.remove(key);
+  }
+
+  void _updateQuantity(model.CartItem item, int newQuantity) {
+    if (newQuantity > 0) {
+      _cartService.updateQuantity(item, newQuantity);
+    }
+  }
+
+  void _handleQuantityChange(model.CartItem item, String value) {
     final newQuantity = int.tryParse(value);
     if (newQuantity != null && newQuantity > 0) {
-      _updateQuantity(id, newQuantity);
+      _updateQuantity(item, newQuantity);
     } else {
       // Revert to current quantity if invalid input
-      final item = _cartItems.firstWhere((item) => item.id == id);
-      _quantityControllers[id]?.text = item.quantity.toString();
+      final key = '${item.id}_${item.color}_${item.size}_${item.customText}';
+      _quantityControllers[key]?.text = item.quantity.toString();
     }
   }
 
-  void _toggleEditing(String id) {
+  void _toggleEditing(model.CartItem item) {
+    final key = '${item.id}_${item.color}_${item.size}_${item.customText}';
     setState(() {
-      _editingStates[id] = !_editingStates[id]!;
+      _editingStates[key] = !(_editingStates[key] ?? false);
     });
   }
 
@@ -213,7 +209,7 @@ class _CartPageState extends State<CartPage> {
         Divider(height: 1, color: Colors.grey[300]),
 
         // Cart Items
-        ..._cartItems.map((item) => _buildDesktopCartItem(item)),
+        ..._cartService.items.map((item) => _buildDesktopCartItem(item)),
 
         const SizedBox(height: 32),
 
@@ -353,7 +349,8 @@ class _CartPageState extends State<CartPage> {
     );
   }
 
-  Widget _buildDesktopCartItem(CartItem item) {
+  Widget _buildDesktopCartItem(model.CartItem item) {
+    final key = '${item.id}_${item.color}_${item.size}_${item.customText}';
     return Column(
       children: [
         const SizedBox(height: 16),
@@ -406,7 +403,7 @@ class _CartPageState extends State<CartPage> {
                         const SizedBox(height: 8),
                         // Remove Button (visible on desktop only)
                         InkWell(
-                          onTap: () => _removeItem(item.id),
+                          onTap: () => _removeItem(item),
                           child: const Text(
                             'Remove',
                             style: TextStyle(
@@ -445,7 +442,7 @@ class _CartPageState extends State<CartPage> {
                   SizedBox(
                     width: 80,
                     child: TextFormField(
-                      controller: _quantityControllers[item.id],
+                      controller: _quantityControllers[key],
                       keyboardType: TextInputType.number,
                       textAlign: TextAlign.center,
                       decoration: InputDecoration(
@@ -462,14 +459,14 @@ class _CartPageState extends State<CartPage> {
                           children: [
                             InkWell(
                               onTap: () {
-                                _updateQuantity(item.id, item.quantity + 1);
+                                _updateQuantity(item, item.quantity + 1);
                               },
                               child: const Icon(Icons.arrow_drop_up, size: 20),
                             ),
                             InkWell(
                               onTap: () {
                                 if (item.quantity > 1) {
-                                  _updateQuantity(item.id, item.quantity - 1);
+                                  _updateQuantity(item, item.quantity - 1);
                                 }
                               },
                               child:
@@ -479,7 +476,7 @@ class _CartPageState extends State<CartPage> {
                         ),
                       ),
                       onChanged: (value) {
-                        _handleQuantityChange(item.id, value);
+                        _handleQuantityChange(item, value);
                       },
                     ),
                   ),
@@ -575,7 +572,7 @@ class _CartPageState extends State<CartPage> {
         Divider(height: 1, color: Colors.grey[300]),
 
         // Cart Items
-        ..._cartItems.map((item) => _buildMobileCartItem(item)),
+        ..._cartService.items.map((item) => _buildMobileCartItem(item)),
 
         const SizedBox(height: 24),
         Divider(height: 1, color: Colors.grey[300]),
@@ -663,8 +660,9 @@ class _CartPageState extends State<CartPage> {
     );
   }
 
-  Widget _buildMobileCartItem(CartItem item) {
-    final isEditing = _editingStates[item.id] ?? false;
+  Widget _buildMobileCartItem(model.CartItem item) {
+    final key = '${item.id}_${item.color}_${item.size}_${item.customText}';
+    final isEditing = _editingStates[key] ?? false;
 
     return Column(
       children: [
@@ -720,7 +718,7 @@ class _CartPageState extends State<CartPage> {
                         const SizedBox(height: 8),
                         // Edit/Cancel Button
                         GestureDetector(
-                          onTap: () => _toggleEditing(item.id),
+                          onTap: () => _toggleEditing(item),
                           child: Text(
                             isEditing ? 'Cancel' : 'Edit',
                             style: const TextStyle(
@@ -766,7 +764,7 @@ class _CartPageState extends State<CartPage> {
               children: [
                 // Remove Button
                 GestureDetector(
-                  onTap: () => _removeItem(item.id),
+                  onTap: () => _removeItem(item),
                   child: const Text(
                     'Remove',
                     style: TextStyle(
@@ -792,7 +790,7 @@ class _CartPageState extends State<CartPage> {
                     SizedBox(
                       width: 100,
                       child: TextFormField(
-                        controller: _quantityControllers[item.id],
+                        controller: _quantityControllers[key],
                         keyboardType: TextInputType.number,
                         textAlign: TextAlign.center,
                         decoration: InputDecoration(
@@ -812,14 +810,14 @@ class _CartPageState extends State<CartPage> {
                             children: [
                               InkWell(
                                 onTap: () =>
-                                    _updateQuantity(item.id, item.quantity + 1),
+                                    _updateQuantity(item, item.quantity + 1),
                                 child:
                                     const Icon(Icons.arrow_drop_up, size: 20),
                               ),
                               InkWell(
                                 onTap: () {
                                   if (item.quantity > 1) {
-                                    _updateQuantity(item.id, item.quantity - 1);
+                                    _updateQuantity(item, item.quantity - 1);
                                   }
                                 },
                                 child:
@@ -829,7 +827,7 @@ class _CartPageState extends State<CartPage> {
                           ),
                         ),
                         onChanged: (value) =>
-                            _handleQuantityChange(item.id, value),
+                            _handleQuantityChange(item, value),
                       ),
                     ),
                   ],
@@ -839,7 +837,7 @@ class _CartPageState extends State<CartPage> {
                 SizedBox(
                   width: double.infinity,
                   child: OutlinedButton(
-                    onPressed: () => _toggleEditing(item.id),
+                    onPressed: () => _toggleEditing(item),
                     style: OutlinedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 12),
                       side: const BorderSide(color: Color(0xFF7B2D8B)),
@@ -866,22 +864,4 @@ class _CartPageState extends State<CartPage> {
       ],
     );
   }
-}
-
-class CartItem {
-  final String id;
-  final String name;
-  final double price;
-  int quantity;
-  final String color;
-  final String size;
-
-  CartItem({
-    required this.id,
-    required this.name,
-    required this.price,
-    required this.quantity,
-    required this.color,
-    required this.size,
-  });
 }

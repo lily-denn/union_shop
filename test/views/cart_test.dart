@@ -2,12 +2,35 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:union_shop/views/cart_page.dart';
 import 'package:union_shop/widgets/app_footer.dart';
+import 'package:union_shop/services/cart_service.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   group('CartPage Tests', () {
+    late CartService cartService;
+
     setUp(() {
+      cartService = CartService();
+      // Clear cart and add sample items for testing
+      cartService.clearCart();
+      cartService.addItem(
+        id: '1',
+        name: 'Limited Edition Essential Zip Hoodie',
+        price: 14.99,
+        quantity: 1,
+        color: 'Baby Pink',
+        size: 'M',
+      );
+      cartService.addItem(
+        id: '2',
+        name: 'Classic T-Shirt',
+        price: 9.99,
+        quantity: 2,
+        color: 'Black',
+        size: 'L',
+      );
+
       // Suppress overflow and network image errors
       FlutterError.onError = (details) {
         final exception = details.exception;
@@ -28,6 +51,8 @@ void main() {
     tearDown(() {
       // Reset to default error handler
       FlutterError.onError = FlutterError.presentError;
+      // Clear cart after each test
+      cartService.clearCart();
     });
 
     Widget createTestWidget({Size? screenSize}) {
@@ -548,8 +573,81 @@ void main() {
         await tester.pumpWidget(createTestWidget());
         await tester.pump();
 
-        // Look for TextFormField in note section
-        expect(find.byType(TextFormField), findsWidgets);
+        // Look for TextField in note section
+        expect(find.byType(TextField), findsWidgets);
+      });
+    });
+
+    group('Empty Cart Tests', () {
+      testWidgets('should display empty cart message when no items',
+          (tester) async {
+        // Clear the cart
+        cartService.clearCart();
+
+        await tester.pumpWidget(createTestWidget());
+        await tester.pump();
+
+        // Should still show cart page structure
+        expect(find.text('Your cart'), findsOneWidget);
+        expect(find.text('Continue shopping'), findsOneWidget);
+
+        // Should not show any product items
+        expect(find.text('Limited Edition Essential Zip Hoodie'), findsNothing);
+        expect(find.text('Classic T-Shirt'), findsNothing);
+      });
+
+      testWidgets('should display subtotal as £0.00 when cart is empty',
+          (tester) async {
+        cartService.clearCart();
+
+        await tester.pumpWidget(createTestWidget());
+        await tester.pump();
+
+        expect(find.text('Subtotal'), findsOneWidget);
+        expect(find.text('£0.00'), findsOneWidget);
+      });
+    });
+
+    group('Cart Service Integration Tests', () {
+      testWidgets('should update when items are added to cart service',
+          (tester) async {
+        cartService.clearCart();
+
+        await tester.pumpWidget(createTestWidget());
+        await tester.pump();
+
+        // Initially empty
+        expect(find.text('Test Product'), findsNothing);
+
+        // Add item through service
+        cartService.addItem(
+          id: 'test_001',
+          name: 'Test Product',
+          price: 25.00,
+          quantity: 1,
+        );
+
+        await tester.pump();
+
+        // Should now show the item
+        expect(find.text('Test Product'), findsOneWidget);
+      });
+
+      testWidgets('should update when items are removed from cart service',
+          (tester) async {
+        await tester.pumpWidget(createTestWidget());
+        await tester.pump();
+
+        // Should have items
+        expect(
+            find.text('Limited Edition Essential Zip Hoodie'), findsOneWidget);
+
+        // Remove all items
+        cartService.clearCart();
+        await tester.pump();
+
+        // Should not show items anymore
+        expect(find.text('Limited Edition Essential Zip Hoodie'), findsNothing);
       });
     });
   });

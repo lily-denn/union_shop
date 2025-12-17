@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:union_shop/widgets/app_navbar.dart';
 import 'package:union_shop/widgets/app_footer.dart';
+import 'package:union_shop/services/cart_service.dart';
 
 class ProductPage extends StatefulWidget {
   const ProductPage({super.key});
@@ -10,6 +11,7 @@ class ProductPage extends StatefulWidget {
 }
 
 class _ProductPageState extends State<ProductPage> {
+  final CartService _cartService = CartService();
   String _selectedColor = 'Baby Pink';
   String _selectedSize = 'M';
   int _quantity = 1;
@@ -699,7 +701,24 @@ class _ProductPageState extends State<ProductPage> {
         SizedBox(
           width: double.infinity,
           child: OutlinedButton(
-            onPressed: () {},
+            onPressed: () {
+              _cartService.addItem(
+                id: 'hoodie_001',
+                name: 'Limited Edition Essential Zip Hoodie',
+                price: 14.99,
+                quantity: _quantity,
+                color: _selectedColor,
+                size: _selectedSize,
+                imageUrl: _productImages[0],
+              );
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Added $_quantity item(s) to cart'),
+                  duration: const Duration(seconds: 2),
+                  backgroundColor: const Color(0xFF4d2963),
+                ),
+              );
+            },
             style: OutlinedButton.styleFrom(
               padding: const EdgeInsets.symmetric(vertical: 16),
               side: const BorderSide(color: Color(0xFF4d2963), width: 2),
